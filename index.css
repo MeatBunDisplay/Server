@@ -1,0 +1,55 @@
+#header{
+    height: 20px;
+}
+
+#title{
+    float: left;
+}
+
+#date{
+    float: right;
+}
+
+#tab{
+    border-radius: 8px 8px 0 0;
+    border: 2px solid #428bca;
+    width: 30vw;
+    min-width: 16em;
+    display: flex;
+}
+
+.tab-selector{
+    flex: 1;
+    user-select: none;
+    cursor : pointer;
+    text-align: center;
+}
+
+.panel{
+    height: 80vh;
+    border-radius: 0 8px 8px 8px;
+    transform: translate(0px, -2px);
+    border: 2px solid #428bca;
+}
+
+#add-items{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item{
+    height: 120px;
+    width: 100px;
+    margin: 5px;
+}
+
+.item-image{
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+    background-color: aquamarine;
+}
+
+.item-name{
+    text-align: center;
+}

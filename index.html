@@ -3,19 +3,66 @@
     <head>
         <title>肉まん表示マン</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
     </head>
     <body>
-        <header>
-            <span id="title">在电脑上显示肉包子的装置</span>
-            <span id="date">1970年01月01日 (悪) 66:66</span>
+        <header id="header">
+            <div id="title">在电脑上显示肉包子的装置</div>
+            <div id="date">1970年01月01日 (悪) 66:66</div>
         </header>
-        <ul class="nav tab-group">
-            <li id="add">追加画面</li>
-            <li id="edit">陳列確認画面</li>
-         </ul>
-        <div id="add">
+        <br>
+        <div id="tab" class="nav tab-group">
+            <span id="add" class="tab-selector" onclick="changeTab('add');">追加画面</span>
+            <span id="edit" class="tab-selector" onclick="changeTab('edit');">陳列確認画面</span>
         </div>
-        <input type="button" onclick="test();">
+        <div id="add-panel" class="panel">
+            追加する肉まんを選択してください。
+            <div id="add-items">
+                <div class="item">
+                    <div class="item-image">
+
+                    </div>
+                    <div class="item-name">
+                        肉まん
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-image">
+
+                    </div>
+                    <div class="item-name">
+                        抹茶まん
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-image">
+
+                    </div>
+                    <div class="item-name">
+                        キン肉マン
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-image">
+
+                    </div>
+                    <div class="item-name">
+                        ウルトラマン
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="edit-panel" class="panel">
+
+        </div>
+
+        <link rel="stylesheet" href="./index.css">
         <script src="./index.js"></script>
+        <script>
+            changeTab("add");
+            setInterval(() => {loop();}, 1000);
+        </script>
     </body>
 </html>
