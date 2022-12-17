@@ -13,7 +13,7 @@
             <div id="date">1970年01月01日 (悪) 66:66</div>
         </header>
         <br>
-        <div id="tab" class="nav tab-group">
+        <div id="tab">
             <span id="add" class="tab-selector" onclick="changeTab('add');">追加画面</span>
             <span id="edit" class="tab-selector" onclick="changeTab('edit');">陳列確認画面</span>
         </div>
@@ -55,13 +55,72 @@
             </div>
         </div>
         <div id="edit-panel" class="panel">
-
+            <div id="edit-tab">
+                <span id="edit-1" class="edit-tab-selector" onclick="changeEditTab(0);">1段目</span>
+                <span id="edit-2" class="edit-tab-selector" onclick="changeEditTab(1);">2段目</span>
+                <span id="edit-3" class="edit-tab-selector" onclick="changeEditTab(2);">3段目</span>
+                <span id="edit-4" class="edit-tab-selector" onclick="changeEditTab(3);">4段目</span>
+                <span id="edit-5" class="edit-tab-selector" onclick="changeEditTab(4);">5段目</span>
+            </div>
+            <div id="item-selectors">
+                <div id="selector-1" class="item-selector">
+                    <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
+                    <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
+                    <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
+                    <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
+                </div>
+                <div id="selector-2" class="item-selector">
+                    <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
+                    <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
+                    <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
+                    <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
+                </div>
+                <div id="selector-3" class="item-selector">
+                    <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
+                    <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
+                    <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
+                    <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
+                </div>
+                <div id="selector-4" class="item-selector">
+                    <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
+                    <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
+                    <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
+                    <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
+                </div>
+                <div id="selector-5" class="item-selector">
+                    <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
+                    <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
+                    <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
+                    <div class="flex-br"></div>
+                    <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
+                    <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
+                </div>
+            </div>
         </div>
 
         <link rel="stylesheet" href="./index.css">
         <script src="./index.js"></script>
         <script>
             changeTab("add");
+            changeEditTab(0);
             setInterval(() => {loop();}, 1000);
         </script>
     </body>

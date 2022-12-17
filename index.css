@@ -12,7 +12,7 @@
 
 #tab{
     border-radius: 8px 8px 0 0;
-    border: 2px solid #428bca;
+    border: 2px solid #428BCA;
     width: 30vw;
     min-width: 16em;
     display: flex;
@@ -29,7 +29,7 @@
     height: 80vh;
     border-radius: 0 8px 8px 8px;
     transform: translate(0px, -2px);
-    border: 2px solid #428bca;
+    border: 2px solid #428BCA;
 }
 
 #add-items{
@@ -52,4 +52,45 @@
 
 .item-name{
     text-align: center;
+}
+
+#edit-tab{
+    width: 80%;
+    margin: 5px auto 0;
+    padding-left: 10px;
+}
+
+.edit-tab-selector{
+    border-radius: 8px 8px 0 0;
+    user-select: none;
+    cursor : pointer;
+    border: 2px solid #428BCA;
+}
+
+.item-selector{
+    z-index: -10;
+    display: flex;
+    flex-wrap: wrap;
+    height: 80%;
+    width: 80%;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    border-radius: 2px;
+    border: 2px solid #428BCA;
+    box-sizing: border-box;
+    background-color: wheat;
+}
+
+.edit-item{
+    margin: 0 auto;
+    border: 1px solid black;
+    box-sizing: border-box;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+}
+
+.flex-br{
+    width:100%;
 }

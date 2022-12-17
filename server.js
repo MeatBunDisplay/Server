@@ -14,7 +14,7 @@ http.createServer((request, response) => {
             break;
         case '/index.js':
             fs.readFile('./index.js', 'UTF-8', (error, data) => {
-                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                response.writeHead(200, { 'Content-Type': 'text/javascript' });
                 response.write(data);
                 response.end();
             })
@@ -29,3 +29,4 @@ http.createServer((request, response) => {
     }
 }).listen(HTTP_PORT);
 console.log(`HTTPサーバをポート${HTTP_PORT}番に立てたよ!!!!!`);
+console.log(`http://localhost:${HTTP_PORT}/index`);
