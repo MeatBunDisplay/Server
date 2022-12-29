@@ -10,7 +10,7 @@
     <body>
         <header id="header">
             <div id="title">在电脑上显示肉包子的装置</div>
-            <div id="date">1970年01月01日 (悪) 66:66</div>
+            <div id="date">1970年01月01日 (日) 12:34</div>
         </header>
         <br>
         <div id="tab">
@@ -115,10 +115,42 @@
                 </div>
             </div>
         </div>
+        <div id="additem-panel">
+            <div id="additem-close" onclick="document.getElementById('additem-panel').style.display = 'none';">×</div>
+            段を選択して肉まんを追加してください
+            <div style="display:flex">
+                <div id="additem-items">
+                    肉まんを置く場所
+                    <div id="additem-viewer">
+                        <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
+                        <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
+                        <div class="flex-br"></div>
+                        <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
+                        <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
+                        <div class="flex-br"></div>
+                        <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
+                        <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
+                    </div>
+                </div>
+                <div id="additem-text">
+                    <div id="additem-description">説明</div>
+                    <div id="additem-time">必要蒸し時間:12:34</div>
+                    <div id="additem-cooking">蒸し中の個数:100</div>
+                    <div id="additem-cooked">蒸しあがった個数:200</div>
+                    <div id="additem-cook">追加する個数:300</div>
+                </div>
+                <div id="additem-button">
+                    <div id="additem-name">TESTまん</div>
+                    <div id="additem-image"></div>
+                </div>
+            </div>
+        </div>
 
         <link rel="stylesheet" href="./index.css">
         <script src="./index.js"></script>
         <script>
+            loop();
+            updateRender();
             changeTab("add");
             changeEditTab(0);
             setInterval(() => {loop();}, 1000);
