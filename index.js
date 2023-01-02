@@ -16,7 +16,7 @@ let registered_nikuman = [
         name: "肉まん",
         price: 100,
         time: 50,
-        description: "この肉まんは非常にいい香りを発している．",
+        description: "とても肉汁がすばらしくジューシーで，食べ応えのある素晴らしい肉まん!",
         place: [0, 1]
     },
     {
@@ -67,29 +67,7 @@ let field = [[],[],[],[],[],[],[],[],[],[]];
 
 let nowdate;
 
-class Nikuman{
-    /**
-     * 
-     * @param {date} time 
-     * @param {number} nikuman_id 
-     */
-    constructor(time, nikuman_id){
-        this.create_time = time;
-        this.id = nikuman_id;
-        let place = registered_nikuman[nikuman_id].place;
-        let is_pushed = false;
-        for(let i = 1;i < place.length;i++){
-            if(field[place[i-1]].length > field[place[i]].length){
-                field[place[i]].push(this);
-                is_pushed = true;
-                break;
-            }
-        }
-        if(!is_pushed){
-            field[place[0]].push(this);
-        }
-    }
-}
+let panel_bg = document.getElementById('panel-bg');
 
 function loop(){
     nowdate = new Date();
@@ -125,76 +103,111 @@ function updateRender() {
                 item.innerText = ``;
                 continue;
             }
-            if (nowdate > field[column][row].finish_time) {
+            if (toMinutes(nowdate) >= field[column][row].finish_time) {
                 item.innerText = `${registered_nikuman[field[column][row].id].name}\n調理済み!`
             }
             else {
-                let lefttime = field[column][row].finish_time - nowdate;
+                let lefttime = toDate(field[column][row].finish_time) - nowdate;
                 item.innerText = `${registered_nikuman[field[column][row].id].name}\n${Math.floor(lefttime/1000/60)}:${(Math.floor(lefttime/1000)%60).toString().padStart(2, "0")}`
             }
         }
     }
 }
 
-let cook = 1;
-let cook_date = new Date();
-let add_id = -1;
-let item_count = 0;
+let adding = {
+    cooking: 0,
+    cooked: 0,
+    cook: 1,
+    id: 1,
+    item_count: 0,
+    cook_minutes: toMinutes(new Date())
+};
 
 function clickAddItem(id, date) {
     console.log("onclick(AddItem)");
-    cook = 1;
-    cook_date = date;
-    add_id = id;
+    adding = {
+        cooking: 0,
+        cooked: 0,
+        cook: 1,
+        id: id,
+        item_count: 0,
+        cook_minutes: toMinutes(date)
+    };
     let panel = document.getElementById('additem-panel');
     let description = document.getElementById('additem-description');
-    description.innerText = `商品説明\n${registered_nikuman[id].description}`;
+    description.innerText = `${registered_nikuman[id].description}`;
+    let price = document.getElementById('additem-price');
+    price.innerText = `価格:${registered_nikuman[id].price}円`;
     let time = document.getElementById('additem-time');
-    time.innerText = `必要蒸し時間:${registered_nikuman[id].time}分`;
-    let cooking = 0;
-    let cooked = 0;
+    time.innerText = `${registered_nikuman[id].time}分`;
     for (let i = 0; i < field.length; i++){
         for (let j = 0; j < field[i].length; j++){
             if (field[i][j].id == id) {
-                item_count++;
-                if (nowdate >= field[i][j].finish_time) {
-                    cooked++;
+                adding.item_count++;
+                if (toMinutes(nowdate) >= field[i][j].finish_time) {
+                    adding.cooked++;
                 }
                 else {
-                    cooking++;
+                    adding.cooking++;
                 }
             }
         }
     }
+    let start_time = document.getElementById('additem-start');
+    start_time.innerText = `${Math.floor(adding.cook_minutes/60%24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes%60).toString().padStart(2, "0")}`;
+    let end_time = document.getElementById('additem-end');
+    end_time.innerText = `${Math.floor((adding.cook_minutes+registered_nikuman[id].time)/60%24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes+registered_nikuman[id].time)%60).toString().padStart(2, "0")}`;
     let cooking_count = document.getElementById('additem-cooking');
-    cooking_count.innerText = `蒸し中の個数:${cooking}`;
+    cooking_count.innerText = `蒸し中の個数:${adding.cooking}`;
     let cooked_count = document.getElementById('additem-cooked');
-    cooked_count.innerText = `蒸しあがった個数:${cooked}`;
+    cooked_count.innerText = `蒸しあがった個数:${adding.cooked}`;
     let cook_count = document.getElementById('additem-cook');
-    cook_count.innerText = `追加する個数:${cook}`;
+    if(registered_nikuman[adding.id].place.length * 3 - adding.item_count <= 0){
+        document.getElementById('additem-decide').disabled = true;
+        cook_count.innerText = `これ以上追加できません!`;
+    }
+    else{
+        document.getElementById('additem-decide').disabled = false;
+        document.getElementById('additem-minus').disabled = false;
+        document.getElementById('additem-plus').disabled = false;
+        cook_count.innerText = `追加する個数:${adding.cook}`;
+    }
     let name = document.getElementById('additem-name');
-    name.innerText = registered_nikuman[id].name;
+    name.innerText = registered_nikuman[adding.id].name;
     panel.style.display = "block";
+    panel_bg.style.display = "block";
 }
 
 function changeCookCount(num) {
-    cook = Math.min(Math.max(1, cook + num), registered_nikuman[add_id].place.length * 3 - item_count);
+    if(registered_nikuman[adding.id].place.length * 3 - adding.item_count <= 0){
+        return;
+    }
+    adding.cook = Math.min(Math.max(1, adding.cook + num), registered_nikuman[adding.id].place.length * 3 - adding.item_count);
     let cook_count = document.getElementById('additem-cook');
-    cook_count.innerText = `追加する個数:${cook}`;
+    cook_count.innerText = `追加する個数:${adding.cook}`;
+}
+
+function changeCookTime(num){
+    adding.cook_minutes += num;
+    let start_time = document.getElementById('additem-start');
+    start_time.innerText = `${Math.floor(adding.cook_minutes/60%24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes%60).toString().padStart(2, "0")}`;
+    let end_time = document.getElementById('additem-end');
+    end_time.innerText = `${Math.floor((adding.cook_minutes+registered_nikuman[adding.id].time)/60%24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes+registered_nikuman[adding.id].time)%60).toString().padStart(2, "0")}`;
 }
 
 function decideAddItem() {
     let panel = document.getElementById('additem-panel');
     panel.style.display = "none";
-    let finish = cook_date;
-    finish.setMinutes(finish.getMinutes() + registered_nikuman[add_id].time);
-    let left = cook;
+    panel_bg.style.display = "none";
+    let finish = adding.cook_minutes;
+    finish += registered_nikuman[adding.id].time;
+    let left = adding.cook;
     for (let j = 0; j < 3; j++){
-        for (let k = 0; k < registered_nikuman[add_id].place.length; k++){
-            if (field[registered_nikuman[add_id].place[k]].length <= j) {
-                field[registered_nikuman[add_id].place[k]][j] = {
-                    id: add_id,
-                    create_time: cook_date,
+        for (let k = 0; k < registered_nikuman[adding.id].place.length; k++){
+            if (field[registered_nikuman[adding.id].place[k]].length <= j) {
+                field[registered_nikuman[adding.id].place[k]][j] = {
+                    id: adding.id,
+                    create_time: adding.cook_minutes,
                     finish_time: finish
                 }
                 left--;
@@ -240,4 +253,21 @@ function changeEditTab(row){
             item_selectors[i].style.display = "none";
         }
     }
+}
+
+function clickItem(row, column){
+
+}
+
+function toMinutes(date){
+    let minutes = Math.floor(date.getTime()/1000/60);
+    minutes += 60*9;//日本時間にする
+    return minutes;
+}
+
+function toDate(minutes){
+    let date = new Date();
+    minutes -= 60*9;//日本時間にする
+    date.setTime(minutes*60*1000);
+    return date;
 }

@@ -1,3 +1,22 @@
+html{
+    height: 100%;
+}
+  
+body{
+    height: 100%;
+    margin: 0;
+}
+
+#panel-bg{
+    height: 100%;
+    width: 100%;
+    background-color: gray;
+    opacity: 0.5;
+    display: none;
+    position: fixed;
+    z-index: 5;
+}
+
 #header{
     height: 20px;
 }
@@ -107,25 +126,19 @@
     border: 2px solid black;
     box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
     display: none;
+    z-index: 10;
 }
 
 #additem-close{
+    padding-left: 5px;
     color: red;
     user-select: none;
     cursor: pointer;
+    font-size: large;
 }
 
-#additem-items {
+#additem-settime{
     width: 30vw;
-    text-align: center;
-}
-
-#additem-viewer{
-    display: flex;
-    flex-wrap: wrap;
-    border: 2px solid black;
-    border-radius: 2px;
-    box-sizing: border-box;
     text-align: center;
 }
 
@@ -151,6 +164,10 @@
     background-color: aquamarine;
 }
 
+#additem-name{
+    font-size: larger;
+}
+
 .change-cook-button{
     display: inline-block;
     width: 20px;
@@ -161,4 +178,31 @@
     text-align: center;
     user-select: none;
     cursor: pointer;
+}
+
+.change-time-button{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: aqua;
+    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    border-radius: 50%;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+#checkitem-panel{
+    background-color: aliceblue;
+    position: fixed;
+    top: 5vh;
+    height: 80vh;
+    width: 90vw;
+    border-radius: 8px;
+    transform: translateX(-50%);
+    left: 50%;
+    border: 2px solid black;
+    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    display: none;
+    z-index: 10;
 }

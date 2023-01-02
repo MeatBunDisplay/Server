@@ -8,6 +8,7 @@
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
     </head>
     <body>
+        <div id="panel-bg"></div>
         <header id="header">
             <div id="title">在电脑上显示肉包子的装置</div>
             <div id="date">1970年01月01日 (日) 12:34</div>
@@ -20,38 +21,6 @@
         <div id="add-panel" class="panel">
             追加する肉まんを選択してください。
             <div id="add-items">
-                <div class="item">
-                    <div class="item-image">
-
-                    </div>
-                    <div class="item-name">
-                        肉まん
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="item-image">
-
-                    </div>
-                    <div class="item-name">
-                        抹茶まん
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="item-image">
-
-                    </div>
-                    <div class="item-name">
-                        キン肉マン
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="item-image">
-
-                    </div>
-                    <div class="item-name">
-                        ウルトラマン
-                    </div>
-                </div>
             </div>
         </div>
         <div id="edit-panel" class="panel">
@@ -64,78 +33,85 @@
             </div>
             <div id="item-selectors">
                 <div id="selector-1" class="item-selector">
-                    <div class="edit-item column0 row0">肉まん<br>12:34</div>
-                    <div class="edit-item column1 row0">肉まん<br>11:34</div>
+                    <div class="edit-item column0 row0" onclick="clickItem(0,0);">肉まん<br>12:34</div>
+                    <div class="edit-item column1 row0" onclick="clickItem(0,1);">肉まん<br>11:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column0 row1">肉まん<br>10:34</div>
-                    <div class="edit-item column1 row1">肉まん<br>9:34</div>
+                    <div class="edit-item column0 row1" onclick="clickItem(1,0);">肉まん<br>10:34</div>
+                    <div class="edit-item column1 row1" onclick="clickItem(1,1);">肉まん<br>9:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column0 row2">肉まん<br>8:34</div>
-                    <div class="edit-item column1 row2">肉まん<br>7:34</div>
+                    <div class="edit-item column0 row2" onclick="clickItem(2,0);">肉まん<br>8:34</div>
+                    <div class="edit-item column1 row2" onclick="clickItem(2,1);">肉まん<br>7:34</div>
                 </div>
                 <div id="selector-2" class="item-selector">
-                    <div class="edit-item column2 row0">肉まん<br>12:34</div>
-                    <div class="edit-item column3 row0">肉まん<br>11:34</div>
+                    <div class="edit-item column2 row0" onclick="clickItem(0,2);">肉まん<br>12:34</div>
+                    <div class="edit-item column3 row0" onclick="clickItem(0,3);">肉まん<br>11:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column2 row1">肉まん<br>10:34</div>
-                    <div class="edit-item column3 row1">肉まん<br>9:34</div>
+                    <div class="edit-item column2 row1" onclick="clickItem(1,2);">肉まん<br>10:34</div>
+                    <div class="edit-item column3 row1" onclick="clickItem(1,3);">肉まん<br>9:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column2 row2">肉まん<br>8:34</div>
-                    <div class="edit-item column3 row2">肉まん<br>7:34</div>
+                    <div class="edit-item column2 row2" onclick="clickItem(2,2);">肉まん<br>8:34</div>
+                    <div class="edit-item column3 row2" onclick="clickItem(2,3);">肉まん<br>7:34</div>
                 </div>
                 <div id="selector-3" class="item-selector">
-                    <div class="edit-item column4 row0">肉まん<br>12:34</div>
-                    <div class="edit-item column5 row0">肉まん<br>11:34</div>
+                    <div class="edit-item column4 row0" onclick="clickItem(0,4);">肉まん<br>12:34</div>
+                    <div class="edit-item column5 row0" onclick="clickItem(0,5);">肉まん<br>11:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column4 row1">肉まん<br>10:34</div>
-                    <div class="edit-item column5 row1">肉まん<br>9:34</div>
+                    <div class="edit-item column4 row1" onclick="clickItem(1,4);">肉まん<br>10:34</div>
+                    <div class="edit-item column5 row1" onclick="clickItem(1,5);">肉まん<br>9:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column4 row2">肉まん<br>8:34</div>
-                    <div class="edit-item column5 row2">肉まん<br>7:34</div>
+                    <div class="edit-item column4 row2" onclick="clickItem(2,4);">肉まん<br>8:34</div>
+                    <div class="edit-item column5 row2" onclick="clickItem(2,5);">肉まん<br>7:34</div>
                 </div>
                 <div id="selector-4" class="item-selector">
-                    <div class="edit-item column6 row0">肉まん<br>12:34</div>
-                    <div class="edit-item column7 row0">肉まん<br>11:34</div>
+                    <div class="edit-item column6 row0" onclick="clickItem(0,6);">肉まん<br>12:34</div>
+                    <div class="edit-item column7 row0" onclick="clickItem(0,7);">肉まん<br>11:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column6 row1">肉まん<br>10:34</div>
-                    <div class="edit-item column7 row1">肉まん<br>9:34</div>
+                    <div class="edit-item column6 row1" onclick="clickItem(1,6);">肉まん<br>10:34</div>
+                    <div class="edit-item column7 row1" onclick="clickItem(1,7);">肉まん<br>9:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column6 row2">肉まん<br>8:34</div>
-                    <div class="edit-item column7 row2">肉まん<br>7:34</div>
+                    <div class="edit-item column6 row2" onclick="clickItem(2,6);">肉まん<br>8:34</div>
+                    <div class="edit-item column7 row2" onclick="clickItem(2,7);">肉まん<br>7:34</div>
                 </div>
                 <div id="selector-5" class="item-selector">
-                    <div class="edit-item column8 row0">肉まん<br>12:34</div>
-                    <div class="edit-item column9 row0">肉まん<br>11:34</div>
+                    <div class="edit-item column8 row0" onclick="clickItem(0,8);">肉まん<br>12:34</div>
+                    <div class="edit-item column9 row0" onclick="clickItem(0,9);">肉まん<br>11:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column8 row1">肉まん<br>10:34</div>
-                    <div class="edit-item column9 row1">肉まん<br>9:34</div>
+                    <div class="edit-item column8 row1" onclick="clickItem(1,8);">肉まん<br>10:34</div>
+                    <div class="edit-item column9 row1" onclick="clickItem(1,9);">肉まん<br>9:34</div>
                     <div class="flex-br"></div>
-                    <div class="edit-item column8 row2">肉まん<br>8:34</div>
-                    <div class="edit-item column9 row2">肉まん<br>7:34</div>
+                    <div class="edit-item column8 row2" onclick="clickItem(2,8);">肉まん<br>8:34</div>
+                    <div class="edit-item column9 row2" onclick="clickItem(2,9);">肉まん<br>7:34</div>
                 </div>
             </div>
         </div>
         <div id="additem-panel">
-            <div id="additem-close" onclick="document.getElementById('additem-panel').style.display = 'none';">×</div>
-            段を選択して肉まんを追加してください
+            <span id="additem-close" onclick="document.getElementById('additem-panel').style.display='none';panel_bg.style.display='none';">×</span>
+            <br>
+            &nbsp;肉まんの個数を設定してください
+            <hr>
             <div style="display:flex">
-                <div id="additem-items">
-                    肉まんを置く場所
-                    <div id="additem-viewer">
-                        <div class="edit-item floor0 column0 row0">肉まん<br>12:34</div>
-                        <div class="edit-item floor0 column1 row0">肉まん<br>11:34</div>
-                        <div class="flex-br"></div>
-                        <div class="edit-item floor0 column0 row1">肉まん<br>10:34</div>
-                        <div class="edit-item floor0 column1 row1">肉まん<br>9:34</div>
-                        <div class="flex-br"></div>
-                        <div class="edit-item floor0 column0 row2">肉まん<br>8:34</div>
-                        <div class="edit-item floor0 column1 row2">肉まん<br>7:34</div>
-                    </div>
+                <div id="additem-settime">
+                    調理開始時間<br>
+                    <span id="additem-verylate" class="change-time-button" onclick="changeCookTime(-10);">&lt;</span>
+                    <span id="additem-late" class="change-time-button" onclick="changeCookTime(-1);">-</span>
+                    <span id="additem-start">12:34</span>
+                    <span id="additem-early" class="change-time-button" onclick="changeCookTime(1);">+</span>
+                    <span id="additem-veryearly" class="change-time-button" onclick="changeCookTime(10);">&gt;</span>
+                    <br><br>
+                    必要蒸し時間
+                    <div id="additem-time">50分</div>
+                    <br>
+                    調理完了時間
+                    <div id="additem-end">13:24</div>
                 </div>
                 <div id="additem-text">
-                    <div id="additem-description">説明</div>
+                    <div id="additem-name">TESTまん</div>
+                    <div id="additem-image"></div>
+                    <div id="additem-price">100円</div>
                     <br>
-                    <div id="additem-time">必要蒸し時間:50分</div>
+                    <div id="additem-description"></div>
+                </div>
+                <div id="additem-button">
                     <div id="additem-cooking">蒸し中の個数:100</div>
                     <div id="additem-cooked">蒸しあがった個数:200</div>
                     <br>
@@ -144,14 +120,13 @@
                         <span id="additem-cook">追加する個数:300</span>
                         <span id="additem-plus" class="change-cook-button" onclick="changeCookCount(1);">+</span>
                     </div>
-                </div>
-                <div id="additem-button">
-                    <div id="additem-name">TESTまん</div>
-                    <div id="additem-image"></div>
                     <br>
                     <button type="button" id="additem-decide" onclick="decideAddItem();">決定</button>
                 </div>
             </div>
+        </div>
+        <div id="checkitem-panel">
+
         </div>
 
         <link rel="stylesheet" href="./index.css">
