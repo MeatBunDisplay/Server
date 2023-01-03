@@ -15,12 +15,18 @@
         </header>
         <br>
         <div id="tab">
-            <span id="add" class="tab-selector" onclick="changeTab('add');">追加画面</span>
-            <span id="edit" class="tab-selector" onclick="changeTab('edit');">陳列確認画面</span>
+            <span id="add" class="tab-selector" onclick="changeTab('add');">肉まんを追加する</span>
+            <span id="sale" class="tab-selector" onclick="changeTab('sale');">肉まんを売る</span>
+            <span id="edit" class="tab-selector" onclick="changeTab('edit');">現在の肉まんを確認する</span>
         </div>
         <div id="add-panel" class="panel">
-            追加する肉まんを選択してください。
+            &nbsp;追加する肉まんを選択してください。
             <div id="add-items">
+            </div>
+        </div>
+        <div id="sale-panel" class="panel">
+            &nbsp;販売した肉まんを選択してください。
+            <div id="sale-items">
             </div>
         </div>
         <div id="edit-panel" class="panel">
@@ -125,8 +131,35 @@
                 </div>
             </div>
         </div>
+        <div id="saleitem-panel">
+            <span id="saleitem-close" onclick="document.getElementById('saleitem-panel').style.display='none';panel_bg.style.display='none';">×</span>
+            <br>
+            &nbsp;売った個数を設定してください
+            <hr>
+            <div style="display:flex">
+                <div id="saleitem-text">
+                    <div id="saleitem-name">TESTまん</div>
+                    <div id="saleitem-image"></div>
+                    <div id="saleitem-price">100円</div>
+                    <br>
+                    <div id="saleitem-description"></div>
+                </div>
+                <div id="saleitem-button">
+                    <div id="saleitem-cooking">蒸し中の個数:100</div>
+                    <div id="saleitem-cooked">蒸しあがった個数:200</div>
+                    <br>
+                    <div id="saleitem-sale-div">
+                        <span id="saleitem-minus" class="change-sale-button" onclick="changeSaleCount(-1);">-</span>
+                        <span id="saleitem-sale">売った個数:300</span>
+                        <span id="saleitem-plus" class="change-sale-button" onclick="changeSaleCount(1);">+</span>
+                    </div>
+                    <br>
+                    <button type="button" id="saleitem-decide" onclick="decideSaleItem();">決定</button>
+                </div>
+            </div>
+        </div>
         <div id="checkitem-panel">
-
+            
         </div>
 
         <link rel="stylesheet" href="./index.css">
