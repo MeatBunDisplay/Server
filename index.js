@@ -229,6 +229,7 @@ function decideAddItem() {
                 }
                 left--;
                 if (left <= 0) {
+                    sortField();
                     updateRender();
                     return;
                 }
@@ -357,7 +358,42 @@ function changeSaleCount(num){
 }
 
 function clickItem(row, column){
+    let panel = document.getElementById('checkitem-panel');
+    let id = field[column][row].id;
+    let description = document.getElementById('checkitem-description');
+    description.innerText = `${registered_nikuman[id].description}`;
+    let price = document.getElementById('checkitem-price');
+    price.innerText = `価格:${registered_nikuman[id].price}円`;
+    checkitem_status = document.getElementById('checkitem-status');
+    let lefttime = toDate(field[column][row].finish_time) - nowdate;
+    if (toMinutes(nowdate) >= field[column][row].finish_time) {
+        checkitem_status.innerText = `調理後経過時間:${Math.floor(-lefttime/1000/60)}分${(Math.floor(-lefttime/1000)%60).toString().padStart(2, "0")}秒`;
+    }
+    else{
+        checkitem_status.innerText = `残り調理時間:${Math.floor(lefttime/1000/60)}分${(Math.floor(lefttime/1000)%60).toString().padStart(2, "0")}秒`;
+    }
+    let button = document.getElementById('checkitem-destroy');
+    button.onclick = () => {destroyItem(row, column);}
+    panel.style.display = "block";
+}
 
+function destroyItem(row, column){
+    let result = window.confirm(`${registered_nikuman[field[column][row].id].name}を廃棄します！よろしいですか？`);
+    if(result){
+        field[column][row].create_time = -999999999;
+        sortField();
+        let index = -1;
+        let max = -999999999;
+        for(let j = registered_nikuman[field[column][row].id].place.length-1; j>=0; j--){
+            if(max < field[registered_nikuman[field[column][row].id].place[j]].length){
+                index = registered_nikuman[field[column][row].id].place[j];
+                max = field[registered_nikuman[field[column][row].id].place[j]].length;
+            }
+        }
+        field[index].pop();
+        let panel = document.getElementById('checkitem-panel');
+        panel.style.display = "none";
+    }
 }
 
 function toMinutes(date){
@@ -371,4 +407,33 @@ function toDate(minutes){
     minutes -= 60*9;//日本時間にする
     date.setTime(minutes*60*1000);
     return date;
+}
+
+function sortField(){
+    for(let i = 0;i < registered_nikuman.length;i++){
+        let arr = [];
+        for(let row = 0;row < 3;row++){
+            for(let column = 0; column < registered_nikuman[i].place.length;column++){
+                if(field[registered_nikuman[i].place[column]].length > row){
+                    arr.push(field[registered_nikuman[i].place[column]][row]);
+                }
+            }
+        }
+        arr.sort(function(a, b){
+            return (a.create_time>b.create_time?-1:1);
+        });
+        let j = 0;
+        for(let row = 0;row < 3;row++){
+            if(j >= arr.length){
+                break;
+            }
+            for(let column = 0; column < registered_nikuman[i].place.length;column++){
+                if(j >= arr.length){
+                    break;
+                }
+                field[registered_nikuman[i].place[column]][row] = arr[j];
+                j++;
+            }
+        }
+    }
 }

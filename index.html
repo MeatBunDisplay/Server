@@ -159,7 +159,20 @@
             </div>
         </div>
         <div id="checkitem-panel">
-            
+            <span id="checkitem-close" onclick="document.getElementById('checkitem-panel').style.display='none';panel_bg.style.display='none';">×</span>
+            <hr>
+            <div style="display:flex">
+                <div id="checkitem-text">
+                    <div id="checkitem-name">TESTまん</div>
+                    <div id="checkitem-image"></div>
+                    <div id="checkitem-price">100円</div>
+                    <br>
+                    <div id="checkitem-description"></div>
+                    <br>
+                    <div id="checkitem-status">調理完了まで:01:23</div>
+                    <button type="button" id="checkitem-destroy" onclick="destroyItem();">廃棄</button>
+                </div>
+            </div>
         </div>
 
         <link rel="stylesheet" href="./index.css">
