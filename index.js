@@ -1,9 +1,12 @@
+import { get_request, post_request } from "./database.js"
+
 const date_element = document.getElementById("date");
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 const EDIT_TAB_COLOR = ["#E3FF93", "#FFF493", "#7EF4FC", "#D4ADCF", "#EF959D"];
 
 /**
  * @type {[{
+ *  id: string,
  *  name: string,
  *  price: number,
  *  time: number,
@@ -12,49 +15,72 @@ const EDIT_TAB_COLOR = ["#E3FF93", "#FFF493", "#7EF4FC", "#D4ADCF", "#EF959D"];
  * }]}
  */
 let registered_nikuman = [
-    {
-        name: "肉まん",
-        price: 100,
-        time: 50,
-        description: "とても肉汁がすばらしくジューシーで，食べ応えのある素晴らしい肉まん!",
-        place: [0, 1]
-    },
-    {
-        name: "抹茶まん",
-        price: 140,
-        time: 50,
-        description: "甘々ベーキング",
-        place: [2, 3]
-    },
-    {
-        name: "ピザまん",
-        price: 120,
-        time: 50,
-        description: "人気",
-        place: [4]
-    },
-    {
-        name: "あんまん",
-        price: 100,
-        time: 50,
-        description: "元気100倍",
-        place: [5]
-    },
-    {
-        name: "黒豚まん",
-        price: 200,
-        time: 50,
-        description: "高いよ",
-        place: [6, 7]
-    },
-    {
-        name: "テストまん",
-        price: 200,
-        time: 1,
-        description: "1分で出来ます",
-        place: [8, 9]
-    }
+    /*{
+            name: "肉まん",
+            price: 100,
+            time: 50,
+            description: "とても肉汁がすばらしくジューシーで，食べ応えのある素晴らしい肉まん!",
+            place: [0, 1]
+        },
+        {
+            name: "抹茶まん",
+            price: 140,
+            time: 50,
+            description: "甘々ベーキング",
+            place: [2, 3]
+        },
+        {
+            name: "ピザまん",
+            price: 120,
+            time: 50,
+            description: "人気",
+            place: [4]
+        },
+        {
+            name: "あんまん",
+            price: 100,
+            time: 50,
+            description: "元気100倍",
+            place: [5]
+        },
+        {
+            name: "黒豚まん",
+            price: 200,
+            time: 50,
+            description: "高いよ",
+            place: [6, 7]
+        },
+        {
+            name: "テストまん",
+            price: 200,
+            time: 1,
+            description: "1分で出来ます",
+            place: [8, 9]
+        }*/
 ];
+
+function set_place_data(object) {
+    object.forEach(element => {
+        registered_nikuman[(registered_nikuman.map(element => element["id"])).indexOf(element.Type)].place.push(element.PlaceID);
+    });
+    setInterval(() => { loop(); }, 1000);
+}
+
+function set_registered_type(object) {
+    registered_nikuman = [];
+    object.forEach(element => {
+        let time = element["Time"];
+        registered_nikuman.push({
+            id: element["ID"],
+            name: element["Name"],
+            price: element["Price"],
+            time: Number(time.substring(0, time.indexOf(":"))) * 60 + Number(time.substring(time.indexOf(":") + 1, time.indexOf(":") + 3)),
+            description: element["Description"],
+            place: []
+        });
+    });
+    get_request("/db/get_place", set_place_data);
+}
 
 /**
  * @type {[[{
@@ -63,13 +89,24 @@ let registered_nikuman = [
  *  id: number,
  * }]]}
  */
-let field = [[],[],[],[],[],[],[],[],[],[]];
+let field = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+];
 
 let nowdate;
 
 let panel_bg = document.getElementById('panel-bg');
 
-function loop(){
+function loop() {
     nowdate = new Date();
     updateRender();
 }
@@ -79,10 +116,10 @@ function updateRender() {
     let add_items = document.getElementById('add-items');
     let add_item = document.getElementsByClassName('item');
     let len = add_item.length;
-    for (let i = 0; i < len; i++){
+    for (let i = 0; i < len; i++) {
         add_items.removeChild(add_item[0]);
     }
-    for (let i = 0; i < registered_nikuman.length; i++){
+    for (let i = 0; i < registered_nikuman.length; i++) {
         let render_item = document.createElement('div');
         render_item.className = 'item';
         let render_image = document.createElement('div');
@@ -96,8 +133,8 @@ function updateRender() {
         render_item.onclick = () => { clickAddItem(number, nowdate); }
         add_items.appendChild(render_item);
     }
-    for (let column = 0; column < 10; column++){
-        for (let row = 0; row < 3; row++){
+    for (let column = 0; column < 10; column++) {
+        for (let row = 0; row < 3; row++) {
             let item = document.getElementsByClassName(`column${column} row${row}`)[0];
             if (row >= field[column].length) {
                 item.innerText = ``;
@@ -105,8 +142,7 @@ function updateRender() {
             }
             if (toMinutes(nowdate) >= field[column][row].finish_time) {
                 item.innerText = `${registered_nikuman[field[column][row].id].name}\n調理済み!`
-            }
-            else {
+            } else {
                 let lefttime = toDate(field[column][row].finish_time) - nowdate;
                 item.innerText = `${registered_nikuman[field[column][row].id].name}\n${Math.floor(lefttime/1000/60)}:${(Math.floor(lefttime/1000)%60).toString().padStart(2, "0")}`
             }
@@ -140,14 +176,13 @@ function clickAddItem(id, date) {
     price.innerText = `価格:${registered_nikuman[id].price}円`;
     let time = document.getElementById('additem-time');
     time.innerText = `${registered_nikuman[id].time}分`;
-    for (let i = 0; i < field.length; i++){
-        for (let j = 0; j < field[i].length; j++){
+    for (let i = 0; i < field.length; i++) {
+        for (let j = 0; j < field[i].length; j++) {
             if (field[i][j].id == id) {
                 adding.item_count++;
                 if (toMinutes(nowdate) >= field[i][j].finish_time) {
                     adding.cooked++;
-                }
-                else {
+                } else {
                     adding.cooking++;
                 }
             }
@@ -162,11 +197,10 @@ function clickAddItem(id, date) {
     let cooked_count = document.getElementById('additem-cooked');
     cooked_count.innerText = `蒸しあがった個数:${adding.cooked}`;
     let cook_count = document.getElementById('additem-cook');
-    if(registered_nikuman[adding.id].place.length * 3 - adding.item_count <= 0){
+    if (registered_nikuman[adding.id].place.length * 3 - adding.item_count <= 0) {
         document.getElementById('additem-decide').disabled = true;
         cook_count.innerText = `これ以上追加できません!`;
-    }
-    else{
+    } else {
         document.getElementById('additem-decide').disabled = false;
         document.getElementById('additem-minus').disabled = false;
         document.getElementById('additem-plus').disabled = false;
@@ -178,8 +212,8 @@ function clickAddItem(id, date) {
     panel_bg.style.display = "block";
 }
 
-function changeCookCount(num) {
-    if(registered_nikuman[adding.id].place.length * 3 - adding.item_count <= 0){
+window.changeCookCount = (num) => {
+    if (registered_nikuman[adding.id].place.length * 3 - adding.item_count <= 0) {
         return;
     }
     adding.cook = Math.min(Math.max(1, adding.cook + num), registered_nikuman[adding.id].place.length * 3 - adding.item_count);
@@ -187,7 +221,7 @@ function changeCookCount(num) {
     cook_count.innerText = `追加する個数:${adding.cook}`;
 }
 
-function changeCookTime(num){
+window.changeCookTime = (num) => {
     adding.cook_minutes += num;
     let start_time = document.getElementById('additem-start');
     start_time.innerText = `${Math.floor(adding.cook_minutes/60%24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes%60).toString().padStart(2, "0")}`;
@@ -195,15 +229,15 @@ function changeCookTime(num){
     end_time.innerText = `${Math.floor((adding.cook_minutes+registered_nikuman[adding.id].time)/60%24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes+registered_nikuman[adding.id].time)%60).toString().padStart(2, "0")}`;
 }
 
-function decideAddItem() {
+window.decideAddItem = () => {
     let panel = document.getElementById('additem-panel');
     panel.style.display = "none";
     panel_bg.style.display = "none";
     let finish = adding.cook_minutes;
     finish += registered_nikuman[adding.id].time;
     let left = adding.cook;
-    for (let j = 0; j < 3; j++){
-        for (let k = 0; k < registered_nikuman[adding.id].place.length; k++){
+    for (let j = 0; j < 3; j++) {
+        for (let k = 0; k < registered_nikuman[adding.id].place.length; k++) {
             if (field[registered_nikuman[adding.id].place[k]].length <= j) {
                 field[registered_nikuman[adding.id].place[k]][j] = {
                     id: adding.id,
@@ -220,34 +254,32 @@ function decideAddItem() {
     }
 }
 
-function changeTab(tabname){
+window.changeTab = (tabname) => {
     console.log("onclick(ChangeTab)");
     let tab_selector = document.getElementsByClassName("tab-selector");
     let panel = document.getElementsByClassName("panel");
-    for(let i = 0;i < tab_selector.length;i++){
-        if(tab_selector[i].id == tabname){
+    for (let i = 0; i < tab_selector.length; i++) {
+        if (tab_selector[i].id == tabname) {
             tab_selector[i].style.backgroundColor = "#428BCA";
             panel[i].style.display = "block";
-        }
-        else{
+        } else {
             tab_selector[i].style.backgroundColor = "transparent";
             panel[i].style.display = "none";
         }
     }
 }
 
-function changeEditTab(row){
+window.changeEditTab = (row) => {
     let item_selectors = document.getElementsByClassName("item-selector");
     let edit_tab_selector = document.getElementsByClassName("edit-tab-selector");
-    for(let i = 0;i < item_selectors.length;i++){
-        if(row == i){
+    for (let i = 0; i < item_selectors.length; i++) {
+        if (row == i) {
             edit_tab_selector[i].style.backgroundColor = EDIT_TAB_COLOR[i];
             edit_tab_selector[i].style.borderBottomColor = "transparent";
             item_selectors[i].style.display = "flex";
             item_selectors[i].style.backgroundColor = EDIT_TAB_COLOR[i];
-            
-        }
-        else{
+
+        } else {
             edit_tab_selector[i].style.backgroundColor = "transparent";
             edit_tab_selector[i].style.borderBottomColor = "#428BCA";
             item_selectors[i].style.display = "none";
@@ -255,19 +287,25 @@ function changeEditTab(row){
     }
 }
 
-function clickItem(row, column){
+window.clickItem = (row, column) => {
 
 }
 
-function toMinutes(date){
-    let minutes = Math.floor(date.getTime()/1000/60);
-    minutes += 60*9;//日本時間にする
+function toMinutes(date) {
+    let minutes = Math.floor(date.getTime() / 1000 / 60);
+    minutes += 60 * 9; //日本時間にする
     return minutes;
 }
 
-function toDate(minutes){
+function toDate(minutes) {
     let date = new Date();
-    minutes -= 60*9;//日本時間にする
-    date.setTime(minutes*60*1000);
+    minutes -= 60 * 9; //日本時間にする
+    date.setTime(minutes * 60 * 1000);
     return date;
 }
+
+loop();
+updateRender();
+changeTab("add");
+changeEditTab(0);
+get_request("/db/get_type", set_registered_type);
