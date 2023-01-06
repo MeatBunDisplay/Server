@@ -310,7 +310,7 @@ window.clickItem = (row, column) => {
             id: field[column][row].uuid
         }, object => {
             delete field[column][row];
-            //
+            //ここでソートする必要がある
             updateRender();
             panel_bg.style.display = 'none';
         });
