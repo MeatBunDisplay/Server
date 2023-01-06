@@ -60,25 +60,31 @@ let registered_nikuman = [
 ];
 
 function set_place_data(object) {
-    object.forEach(element => {
-        registered_nikuman[(registered_nikuman.map(element => element["id"])).indexOf(element.Type)].place.push(element.PlaceID);
-    });
+    if (object.length > 0) {
+        object.forEach(element => {
+            if (element["Type"] != null) {
+                registered_nikuman[(registered_nikuman.map(element => element["id"])).indexOf(element.Type)].place.push(element.PlaceID);
+            }
+        });
+    }
     setInterval(() => { loop(); }, 1000);
 }
 
 function set_registered_type(object) {
     registered_nikuman = [];
-    object.forEach(element => {
-        let time = element["Time"];
-        registered_nikuman.push({
-            id: element["ID"],
-            name: element["Name"],
-            price: element["Price"],
-            time: Number(time.substring(0, time.indexOf(":"))) * 60 + Number(time.substring(time.indexOf(":") + 1, time.indexOf(":") + 3)),
-            description: element["Description"],
-            place: []
+    if (object.length > 0) {
+        object.forEach(element => {
+            let time = element["Time"];
+            registered_nikuman.push({
+                id: element["ID"],
+                name: element["Name"],
+                price: element["Price"],
+                time: Number(time.substring(0, time.indexOf(":"))) * 60 + Number(time.substring(time.indexOf(":") + 1, time.indexOf(":") + 3)),
+                description: element["Description"],
+                place: []
+            });
         });
-    });
+    }
     get_request("/db/get_place", set_place_data);
 }
 
