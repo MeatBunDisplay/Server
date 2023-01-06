@@ -382,7 +382,9 @@ window.decideSaleItem = () => {
     for (let j = 2; j >= 0; j--) {
         for (let k = registered_nikuman[adding.id].place.length - 1; k >= 0; k--) {
             if (field[registered_nikuman[adding.id].place[k]].length > j) {
-                field[registered_nikuman[adding.id].place[k]].pop()
+                post_request("/db/delete_meatbut", {
+                    id: (field[registered_nikuman[adding.id].place[k]].pop()).uuid
+                }, object => {});
                 left--;
                 if (left <= 0) {
                     updateRender();
