@@ -162,7 +162,8 @@ let adding = {
     cook: 1,
     id: 1,
     item_count: 0,
-    cook_minutes: toMinutes(new Date())
+    cook_minutes: toMinutes(new Date()),
+    start_datetime: new Date()
 };
 
 function clickAddItem(id, date) {
@@ -173,7 +174,8 @@ function clickAddItem(id, date) {
         cook: 1,
         id: id,
         item_count: 0,
-        cook_minutes: toMinutes(date)
+        cook_minutes: toMinutes(date),
+        start_datetime: `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`
     };
     let panel = document.getElementById('additem-panel');
     let description = document.getElementById('additem-description');
@@ -249,7 +251,13 @@ window.decideAddItem = () => {
                     id: adding.id,
                     create_time: adding.cook_minutes,
                     finish_time: finish
-                }
+                };
+                // post_request("/db/add_meatbut", {
+                //     "type": registered_nikuman[adding.id].id,
+                //     "number": j,
+                //     "layer": registered_nikuman[adding.id].place[k],
+                //     "start_date": adding.start_datetime
+                // }, object => {});
                 left--;
                 if (left <= 0) {
                     updateRender();
