@@ -14,50 +14,25 @@ const EDIT_TAB_COLOR = ["#E3FF93", "#FFF493", "#7EF4FC", "#D4ADCF", "#EF959D"];
  *  place: [number],
  * }]}
  */
-let registered_nikuman = [
-    /*{
-            name: "肉まん",
-            price: 100,
-            time: 50,
-            description: "とても肉汁がすばらしくジューシーで，食べ応えのある素晴らしい肉まん!",
-            place: [0, 1]
-        },
-        {
-            name: "抹茶まん",
-            price: 140,
-            time: 50,
-            description: "甘々ベーキング",
-            place: [2, 3]
-        },
-        {
-            name: "ピザまん",
-            price: 120,
-            time: 50,
-            description: "人気",
-            place: [4]
-        },
-        {
-            name: "あんまん",
-            price: 100,
-            time: 50,
-            description: "元気100倍",
-            place: [5]
-        },
-        {
-            name: "黒豚まん",
-            price: 200,
-            time: 50,
-            description: "高いよ",
-            place: [6, 7]
-        },
-        {
-            name: "テストまん",
-            price: 200,
-            time: 1,
-            description: "1分で出来ます",
-            place: [8, 9]
-        }*/
-];
+let registered_nikuman = [];
+
+function set_meatbut_field(object) {
+    if (object.length > 0) {
+        object.forEach(element => {
+            field[element.Layer][element.Number] = {
+                id: (registered_nikuman.map(element => element["id"])).indexOf(element.Type),
+                uuid: element.ID,
+                create_time: toMinutes(new Date(element.StartTime)),
+                finish_time: toMinutes(new Date(element.EndTime))
+            };
+        });
+    }
+}
+
+function get_meatbut_data(object) {
+    set_meatbut_field(object);
+    setInterval(() => { loop(); }, 1000);
+}
 
 function set_place_data(object) {
     if (object.length > 0) {
@@ -67,7 +42,8 @@ function set_place_data(object) {
             }
         });
     }
-    setInterval(() => { loop(); }, 1000);
+    //setInterval(() => { loop(); }, 1000);
+    get_request("/db/get_meatbut", get_meatbut_data);
 }
 
 function set_registered_type(object) {
@@ -93,6 +69,7 @@ function set_registered_type(object) {
  *  create_time: date,
  *  finish_time: date,
  *  id: number,
+ *  uuid: string,
  * }]]}
  */
 let field = [
@@ -247,20 +224,24 @@ window.decideAddItem = () => {
     for (let j = 0; j < 3; j++) {
         for (let k = 0; k < registered_nikuman[adding.id].place.length; k++) {
             if (field[registered_nikuman[adding.id].place[k]].length <= j) {
-                field[registered_nikuman[adding.id].place[k]][j] = {
+                /*field[registered_nikuman[adding.id].place[k]][j] = {
                     id: adding.id,
                     create_time: adding.cook_minutes,
                     finish_time: finish
-                };
-                // post_request("/db/add_meatbut", {
-                //     "type": registered_nikuman[adding.id].id,
-                //     "number": j,
-                //     "layer": registered_nikuman[adding.id].place[k],
-                //     "start_date": adding.start_datetime
-                // }, object => {});
+                };*/
+                post_request("/db/add_meatbut", {
+                    "type": registered_nikuman[adding.id].id,
+                    "number": j,
+                    "layer": registered_nikuman[adding.id].place[k],
+                    "start_date": adding.start_datetime
+                }, object => {});
                 left--;
                 if (left <= 0) {
-                    updateRender();
+                    get_request("/db/get_meatbut", object => {
+                        set_meatbut_field(object);
+                        updateRender();
+                    });
+                    //updateRender();
                     return;
                 }
             }
