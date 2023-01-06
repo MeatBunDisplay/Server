@@ -176,7 +176,7 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`UPDATE MeatBut SET Number=${data["number"]}, Layer=${data["layer"]} WHERE ID=${data["id"]} Type=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
+                    connection.query(`UPDATE MeatBut SET Number=${data["number"]}, Layer=${data["layer"]} WHERE ID=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
                         if (error) {
                             response.writeHead(500, { 'Content-Type': 'application/json' });
                             response.end(JSON.stringify(error));
@@ -193,7 +193,7 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`DELETE FROM PlaceData WHERE PlaceID=${data["place"]}`, function(error, results, fields) {
+                    connection.query(`DELETE FROM PlaceData WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
                         if (error) {
                             response.writeHead(500, { 'Content-Type': 'application/json' });
                             response.end(JSON.stringify(error));
@@ -210,7 +210,7 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`DELETE FROM MeatbutType WHERE ID=UUID_TO_BIN('${data["type"]}')`, function(error, results, fields) {
+                    connection.query(`DELETE FROM MeatbutType WHERE ID=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
                         if (error) {
                             response.writeHead(500, { 'Content-Type': 'application/json' });
                             response.end(JSON.stringify(error));
@@ -227,7 +227,7 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`DELETE FROM Meatbut WHERE ID=UUID_TO_BIN('${data["id"]}') AND Type=UUID_TO_BIN('${data["type"]}')`, function(error, results, fields) {
+                    connection.query(`DELETE FROM Meatbut WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                         if (error) {
                             response.writeHead(500, { 'Content-Type': 'application/json' });
                             response.end(JSON.stringify(error));
