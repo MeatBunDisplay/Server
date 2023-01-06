@@ -66,7 +66,7 @@ http.createServer((request, response) => {
             });
             break;
         case '/db/get_meatbut':
-            connection.query('SELECT BIN_TO_UUID(ID) AS ID, BIN_TO_UUID(Type) AS Type, Number, StartTime, EndTime FROM MeatBut;', function(error, results, fields) {
+            connection.query('SELECT BIN_TO_UUID(ID) AS ID, BIN_TO_UUID(Type) AS Type, Number, Layer, StartTime, EndTime FROM MeatBut;', function(error, results, fields) {
                 if (error) {
                     response.writeHead(500, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(error));
@@ -129,7 +129,7 @@ http.createServer((request, response) => {
                 .on('end', function() {
                     data = JSON.parse(data);
                     if (data["start_time"] === undefined) {
-                        connection.query(`INSERT MeatBut VALUES(UUID_TO_BIN(UUID()), UUID_TO_BIN('${data["type"]}'), ${data["number"]}, CAST(NOW() AS DATETIME), ADDTIME(CAST(NOW() AS DATETIME), (SELECT Time FROM MeatButType WHERE ID=UUID_TO_BIN('${data["type"]}'))));`, function(error, results, fields) {
+                        connection.query(`INSERT MeatBut VALUES(UUID_TO_BIN(UUID()), UUID_TO_BIN('${data["type"]}'), ${data["number"]}, ${data["layer"]}, CAST(NOW() AS DATETIME), ADDTIME(CAST(NOW() AS DATETIME), (SELECT Time FROM MeatButType WHERE ID=UUID_TO_BIN('${data["type"]}'))));`, function(error, results, fields) {
                             if (error) {
                                 response.writeHead(500, { 'Content-Type': 'application/json' });
                                 response.end(JSON.stringify(error));
@@ -176,7 +176,7 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`UPDATE MeatBut SET Number=${data["number"]} WHERE ID=${data["id"]} Type=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
+                    connection.query(`UPDATE MeatBut SET Number=${data["number"]}, Layer=${data["layer"]} WHERE ID=${data["id"]} Type=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
                         if (error) {
                             response.writeHead(500, { 'Content-Type': 'application/json' });
                             response.end(JSON.stringify(error));
