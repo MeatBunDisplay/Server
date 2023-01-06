@@ -85,6 +85,23 @@ let field = [
     []
 ];
 
+function initialize_item_selector() {
+    let item_selectors = window.document.getElementById("item-selectors");
+    let selectors_size = 5;
+    let row_size = 3;
+    let column_size = 2;
+    for (let ss = 1; ss <= selectors_size; ss++) {
+        item_selectors.insertAdjacentHTML("beforeend", `<div id="selector-${ss}" class="item-selector"></div>`);
+        let selector = window.document.getElementById(`selector-${ss}`);
+        for (let rs = 0; rs < row_size; rs++) {
+            for (let cs = 0; cs < column_size; cs++) {
+                selector.insertAdjacentHTML("beforeend", `<div class="edit-item column${cs+((ss-1)*column_size)} row${rs}" onclick="clickItem(${rs},${cs+((ss-1)*column_size)});"></div>`);
+            }
+            if (rs + 1 != row_size) selector.insertAdjacentHTML("beforeend", `<div class="flex-br"></div>`);
+        }
+    }
+}
+
 let nowdate;
 
 window.panel_bg = document.getElementById('panel-bg');
@@ -308,7 +325,7 @@ let selling = {
     item_count: 0
 };
 
-function clickSaleItem(id) {
+window.clickSaleItem = (id) => {
     console.log("onclick(SaleItem)");
     selling = {
         cooking: 0,
@@ -355,7 +372,7 @@ function clickSaleItem(id) {
     panel_bg.style.display = "block";
 }
 
-function decideSaleItem() {
+window.decideSaleItem = () => {
     let panel = document.getElementById('saleitem-panel');
     panel.style.display = "none";
     panel_bg.style.display = "none";
@@ -376,20 +393,20 @@ function decideSaleItem() {
     }
 }
 
-function changeSaleCount(num) {
+window.changeSaleCount = (num) => {
     selling.sale = Math.max(0, Math.min(selling.sale + num, selling.cooked));
     let sale_count = document.getElementById('saleitem-sale');
     sale_count.innerText = `追加する個数:${selling.sale}`;
 }
 
-function clickItem(row, column) {
+window.clickItem = (row, column) => {
     let panel = document.getElementById('checkitem-panel');
     let id = field[column][row].id;
     let description = document.getElementById('checkitem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('checkitem-price');
     price.innerText = `価格:${registered_nikuman[id].price}円`;
-    checkitem_status = document.getElementById('checkitem-status');
+    let checkitem_status = document.getElementById('checkitem-status');
     let lefttime = toDate(field[column][row].finish_time) - nowdate;
     if (toMinutes(nowdate) >= field[column][row].finish_time) {
         checkitem_status.innerText = `調理後経過時間:${Math.floor(-lefttime/1000/60)}分${(Math.floor(-lefttime/1000)%60).toString().padStart(2, "0")}秒`;
@@ -401,22 +418,26 @@ function clickItem(row, column) {
     panel.style.display = "block";
 }
 
-function destroyItem(row, column) {
+window.destroyItem = (row, column) => {
     let result = window.confirm(`${registered_nikuman[field[column][row].id].name}を廃棄します！よろしいですか？`);
     if (result) {
-        field[column][row].create_time = -999999999;
-        sortField();
-        let index = -1;
-        let max = -999999999;
-        for (let j = registered_nikuman[field[column][row].id].place.length - 1; j >= 0; j--) {
-            if (max < field[registered_nikuman[field[column][row].id].place[j]].length) {
-                index = registered_nikuman[field[column][row].id].place[j];
-                max = field[registered_nikuman[field[column][row].id].place[j]].length;
+        post_request("/db/delete_meatbut", {
+            id: field[column][row].uuid
+        }, object => {
+            field[column][row].create_time = -999999999;
+            sortField();
+            let index = -1;
+            let max = -999999999;
+            for (let j = registered_nikuman[field[column][row].id].place.length - 1; j >= 0; j--) {
+                if (max < field[registered_nikuman[field[column][row].id].place[j]].length) {
+                    index = registered_nikuman[field[column][row].id].place[j];
+                    max = field[registered_nikuman[field[column][row].id].place[j]].length;
+                }
             }
-        }
-        field[index].pop();
-        let panel = document.getElementById('checkitem-panel');
-        panel.style.display = "none";
+            field[index].pop();
+            let panel = document.getElementById('checkitem-panel');
+            panel.style.display = "none";
+        });
     }
 }
 
@@ -433,7 +454,7 @@ function toDate(minutes) {
     return date;
 }
 
-function sortField() {
+window.sortField = () => {
     for (let i = 0; i < registered_nikuman.length; i++) {
         let arr = [];
         for (let row = 0; row < 3; row++) {
@@ -462,6 +483,7 @@ function sortField() {
     }
 }
 
+initialize_item_selector();
 loop();
 updateRender();
 changeTab("add");
