@@ -110,7 +110,7 @@ let field = [
 
 let nowdate;
 
-let panel_bg = document.getElementById('panel-bg');
+window.panel_bg = document.getElementById('panel-bg');
 
 function loop() {
     nowdate = new Date();
