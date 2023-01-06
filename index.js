@@ -88,14 +88,16 @@ let field = [
 function initialize_item_selector() {
     let item_selectors = window.document.getElementById("item-selectors");
     let selectors_size = 5;
-    let row_size = 2;
-    let column_size = 3;
+    let row_size = 3;
+    let column_size = 2;
     for (let ss = 1; ss <= selectors_size; ss++) {
         item_selectors.insertAdjacentHTML("beforeend", `<div id="selector-${ss}" class="item-selector"></div>`);
+        let selector = window.document.getElementById(`selector-${ss}`);
         for (let rs = 0; rs < row_size; rs++) {
             for (let cs = 0; cs < column_size; cs++) {
-                //
+                selector.insertAdjacentHTML("beforeend", `<div class="edit-item column${cs+((ss-1)*column_size)} row${rs}" onclick="clickItem(${rs},${cs+((ss-1)*column_size)});"></div>`);
             }
+            if (rs + 1 != row_size) selector.insertAdjacentHTML("beforeend", `<div class="flex-br"></div>`);
         }
     }
 }
@@ -298,7 +300,21 @@ window.changeEditTab = (row) => {
 }
 
 window.clickItem = (row, column) => {
-
+    let note = "";
+    let diff = toDate(field[column][row].finish_time) - nowdate;
+    if (toMinutes(nowdate) >= field[column][row].finish_time) note = "調理済みの肉まんです。";
+    else note = `まだ残り蒸し時間は${Math.floor(diff/1000/60)}分${(Math.floor(diff/1000)%60).toString().padStart(2, "0")}秒あります。`;
+    if (window.confirm(`選択された「${registered_nikuman[field[column][row].id].name}」を削除しますか？\n${note}`)) {
+        panel_bg.style.display = 'block';
+        post_request("/db/delete_meatbut", {
+            id: field[column][row].uuid
+        }, object => {
+            delete field[column][row];
+            //
+            updateRender();
+            panel_bg.style.display = 'none';
+        });
+    }
 }
 
 function toMinutes(date) {
@@ -314,8 +330,8 @@ function toDate(minutes) {
     return date;
 }
 
-loop();
 initialize_item_selector();
+loop();
 updateRender();
 changeTab("add");
 changeEditTab(0);
