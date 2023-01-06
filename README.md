@@ -2,6 +2,13 @@
 サーバーです
 
 ## データベース操作
+### インストール
+* MySQL80系推奨
+    * 80以上なら
+    * `ALTER USER '特権ユーザー名'@'localhost' IDENTIFIED WITH mysql_native_password BY 'パスワード';`
+    * を実行
+* mysqlパッケージ(npm)
+    * `npm install mysql`
 ### 初期化
 `init.sql`のSQL文を実行する。この時点で列は10個用意される。
 ### 初期設定

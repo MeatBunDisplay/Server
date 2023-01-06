@@ -140,7 +140,7 @@ http.createServer((request, response) => {
                             }
                         });
                     } else {
-                        connection.query(`INSERT MeatBut VALUES(UUID_TO_BIN(UUID()), UUID_TO_BIN('${data["type"]}'), ${data["number"]}, CAST('${data["start_time"]}' AS DATETIME), ADDTIME(CAST('${data["start_time"]}' AS DATETIME), (SELECT Time FROM MeatButType WHERE ID=UUID_TO_BIN('${data["type"]}'))));`, function(error, results, fields) {
+                        connection.query(`INSERT MeatBut VALUES(UUID_TO_BIN(UUID()), UUID_TO_BIN('${data["type"]}'), ${data["number"]}, ${data["layer"]}, CAST('${data["start_time"]}' AS DATETIME), ADDTIME(CAST('${data["start_time"]}' AS DATETIME), (SELECT Time FROM MeatButType WHERE ID=UUID_TO_BIN('${data["type"]}'))));`, function(error, results, fields) {
                             if (error) {
                                 response.writeHead(500, { 'Content-Type': 'application/json' });
                                 response.end(JSON.stringify(error));
