@@ -85,6 +85,21 @@ let field = [
     []
 ];
 
+function initialize_item_selector() {
+    let item_selectors = window.document.getElementById("item-selectors");
+    let selectors_size = 5;
+    let row_size = 2;
+    let column_size = 3;
+    for (let ss = 1; ss <= selectors_size; ss++) {
+        item_selectors.insertAdjacentHTML("beforeend", `<div id="selector-${ss}" class="item-selector"></div>`);
+        for (let rs = 0; rs < row_size; rs++) {
+            for (let cs = 0; cs < column_size; cs++) {
+                //
+            }
+        }
+    }
+}
+
 let nowdate;
 
 window.panel_bg = document.getElementById('panel-bg');
@@ -300,6 +315,7 @@ function toDate(minutes) {
 }
 
 loop();
+initialize_item_selector();
 updateRender();
 changeTab("add");
 changeEditTab(0);
