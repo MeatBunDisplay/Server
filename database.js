@@ -1,5 +1,5 @@
 //POSTリクエスト用関数
-function post_request(url, json_data, cf) {
+export function post_request(url, json_data, cf) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
@@ -16,7 +16,7 @@ function post_request(url, json_data, cf) {
 }
 
 //GETリクエスト用関数
-function get_request(url, cf) {
+export function get_request(url, cf) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4) {
