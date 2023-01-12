@@ -76,6 +76,17 @@ http.createServer((request, response) => {
                 }
             });
             break;
+        case '/db/get_fastest_mb':
+            connection.query('SELECT MBL.TypeName, COUNT(MBL.TypeName) AS Count, MBL.EndTime FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, EndTime FROM MeatBut AS MB WHERE EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type)) AS MBL GROUP BY TypeName;', function(error, results, fields) {
+                if (error) {
+                    response.writeHead(500, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(error));
+                } else {
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(results));
+                }
+            });
+            break;
         case '/db/add_place':
             data = '';
             request.on('data', function(chunk) { data += chunk })
