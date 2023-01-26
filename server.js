@@ -21,6 +21,13 @@ http.createServer((request, response) => {
                 response.end();
             })
             break;
+        case '/visualizer':
+            fs.readFile('./visualizer.html', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/html' });
+                response.write(data);
+                response.end();
+            })
+            break;
         case '/index.js':
             fs.readFile('./index.js', 'UTF-8', (error, data) => {
                 response.writeHead(200, { 'Content-Type': 'text/javascript' });
