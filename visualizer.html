@@ -38,7 +38,7 @@
                             state = element["Count"] + "個蒸されています";
                         }
                         else{
-                            state = "あと" + (Date.parse(element["EndTime"])-nowdate) + "分";
+                            state = "あと" + Math.floor((Date.parse(element["EndTime"])-nowdate)/1000/60) + "分";
                         }
                         meatbuts.insertAdjacentHTML('beforeend', `<div class="edit-item">${element["TypeName"]}<br>${state}</div>`);
                     });
