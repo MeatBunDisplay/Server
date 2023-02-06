@@ -67,6 +67,12 @@
 	    	}, test_console_log);
         }
         
+        window.delete_type = (uuid) => {
+        	post_request("db/delete_type", {
+		    	"type": uuid,
+	    	}, test_console_log);
+        }
+        
         function loop() {
             nowdate = new Date();
             date_element.innerText = `${nowdate.getFullYear()}年${nowdate.getMonth()+1}月${nowdate.getDate()}日(${WEEK[nowdate.getDay()]}) ${nowdate.getHours().toString().padStart(2, "0")}:${nowdate.getMinutes().toString().padStart(2, "0")}:${nowdate.getSeconds().toString().padStart(2, "0")}`;
@@ -74,7 +80,7 @@
                 if(JSON.stringify(object)!=least_type_data){
                     type_list.innerHTML="";
                     object.forEach(element => {
-                        type_list.insertAdjacentHTML('beforeend', `<div class="edit-item">${element["Name"]}<br>${element["Price"]}円<br><input id=\"${element["ID"]}\" placeholder="場所（例：0）"><br><input type="button" onclick="add_place('${element["ID"]}');" value="場所追加"></div>`);
+                        type_list.insertAdjacentHTML('beforeend', `<div class="edit-item">${element["Name"]}<br><!--${element["Price"]}円<br>--><input id=\"${element["ID"]}\" placeholder="場所（例：0）"><br><input type="button" onclick="add_place('${element["ID"]}');" value="場所追加"><input type="button" onclick="delete_type('${element["ID"]}');" value="種類削除"></div>`);
                     });
                     least_type_data=JSON.stringify(object);
                 } else {
