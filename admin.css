@@ -1,0 +1,8 @@
+.edit-place{
+    text-align: center;
+}
+
+#place_list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}

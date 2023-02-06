@@ -11,16 +11,25 @@
 
 <body>
     <header id="header">
-        <div id="title">肉まんの炊け具合</div>
+        <div id="title">管理者用肉まん管理画面</div>
         <div id="date">1970年01月01日 (日) 12:34</div>
     </header>
+    <br>
+    肉まんの種類を追加する
     <div>
-    	<input id="type_name" placeholder="名前">
-    	<input id="type_price" placeholder="価格">
-    	<input id="type_time" placeholder="時間（例5分：0500）">
-    	<input id="type_description" placeholder="説明">
-    	<input type="button" onclick="add_type();" value="追加">
+    	<input id="type_name" placeholder="名前"><br>
+    	<input id="type_price" type="number" placeholder="価格" style="width: 5em;">円<br>
+    	<input id="type_time" type="number" placeholder="時間" style="width: 5em;">分<br>
+    	<input id="type_description" placeholder="説明" columns="30" rows="10"><br>
+    	<input type="button" onclick="add_type();" value="追加"><br>
     </div>
+    <div id="caution" style="color: red;"></div>
+
+    <select name="example">
+        <option>選択肢のサンプル1</option>
+        <option>選択肢のサンプル2</option>
+        <option>選択肢のサンプル3</option>
+    </select>
     <p>種類</p>
     <div id="type_list">
     </div>
@@ -28,89 +37,8 @@
 	<div id="place_list">
     </div>
     
-    <link rel="stylesheet" href="./index.css">
-    <script type="module">
-        import { get_request, post_request } from "./database.js";
-
-        let nowdate;
-        let least_type_data;
-        let least_place_data;
-        const type_list = window.document.getElementById("type_list");
-        const place_list = window.document.getElementById("place_list");
-        const date_element = window.document.getElementById("date");
-        const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
-        
-        function test_console_log(object) {
-    		console.log(object);
-		}
-        
-        window.add_type = () => {
-        	post_request("db/add_type", {
-		        "name": window.document.getElementById("type_name").value,
-		        "price": window.document.getElementById("type_price").value,
-		        "time": window.document.getElementById("type_time").value,
-		        "description": window.document.getElementById("type_description").value
-	    	}, test_console_log);
-        }
-        
-        window.add_place = (uuid) => {
-        	post_request("db/update_place", {
-		        "place": window.document.getElementById(uuid).value,
-		        "type": uuid
-	    	}, test_console_log);
-        }
-        
-        window.remove_place = (placeid) => {
-        	post_request("db/update_place", {
-		    	"place": placeid,
-		        "type": "NULL"
-	    	}, test_console_log);
-        }
-        
-        window.delete_type = (uuid) => {
-        	post_request("db/delete_type", {
-		    	"type": uuid,
-	    	}, test_console_log);
-        }
-        
-        function loop() {
-            nowdate = new Date();
-            date_element.innerText = `${nowdate.getFullYear()}年${nowdate.getMonth()+1}月${nowdate.getDate()}日(${WEEK[nowdate.getDay()]}) ${nowdate.getHours().toString().padStart(2, "0")}:${nowdate.getMinutes().toString().padStart(2, "0")}:${nowdate.getSeconds().toString().padStart(2, "0")}`;
-            get_request("/db/get_type", object => {
-                if(JSON.stringify(object)!=least_type_data){
-                    type_list.innerHTML="";
-                    object.forEach(element => {
-                        type_list.insertAdjacentHTML('beforeend', `<div class="edit-item">${element["Name"]}<br><!--${element["Price"]}円<br>--><input id=\"${element["ID"]}\" placeholder="場所（例：0）"><br><input type="button" onclick="add_place('${element["ID"]}');" value="場所追加"><input type="button" onclick="delete_type('${element["ID"]}');" value="種類削除"></div>`);
-                    });
-                    least_type_data=JSON.stringify(object);
-                } else {
-                    //
-                }
-            });
-            get_request("/db/get_place", object => {
-                if(JSON.stringify(object)!=least_place_data){
-                    place_list.innerHTML="";
-                    let ltd = JSON.parse(least_type_data);
-                    object.forEach(element => {
-                    	let mdata = ltd[(ltd.map(element => element["ID"])).indexOf(element["Type"])];
-                    	if(mdata === undefined){
-                    		mdata = "空き";
-                    	} else {
-                    		mdata = mdata.Name;
-                    	}
-                        place_list.insertAdjacentHTML('beforeend', `<div class="edit-item">${element["PlaceID"]}<br>${mdata}<br><input type="button" value="削除" onclick="remove_place(${element["PlaceID"]});"></div>`);
-                    });
-                    least_place_data=JSON.stringify(object);
-                } else {
-                    //
-                }
-            });
-        }
-        loop();
-        setInterval(() => {
-            loop();
-        }, 1000);
-    </script>
+    <link rel="stylesheet" href="./admin.css">
+    <script type="module" src="./admin.js"></script>
 </body>
 
 </html>

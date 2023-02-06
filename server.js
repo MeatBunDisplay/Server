@@ -3,12 +3,16 @@ const HTTP_PORT = 80;
 const http = require('http');
 const fs = require('fs');
 const mysql = require('mysql');
+const { networkInterfaces } = require('os');
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'mokemoke',
     database: 'MeatButDB'
 });
+
+const iplist = getIpAddr();
+const ip = iplist[Object.keys(iplist)[0]][0];
 
 let data = '';
 
@@ -45,6 +49,20 @@ http.createServer((request, response) => {
         case '/index.css':
             fs.readFile('./index.css', 'UTF-8', (error, data) => {
                 response.writeHead(200, { 'Content-Type': 'text/css' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/admin.js':
+            fs.readFile('./admin.js', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/javascript' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/admin.css':
+            fs.readFile('./admin.css', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/css'  });
                 response.write(data);
                 response.end();
             })
@@ -296,4 +314,21 @@ http.createServer((request, response) => {
     }
 }).listen(HTTP_PORT);
 console.log(`HTTPサーバをポート${HTTP_PORT}番に立てたよ!!!!!`);
-console.log(`http://localhost:${HTTP_PORT}/index`);
+console.log(`http://${ip}:${HTTP_PORT}/index`);
+
+function getIpAddr() {
+    let answer = Object.create(null);
+    const nets = networkInterfaces();
+    for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+        const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+        if (net.family === familyV4Value && !net.internal) {
+          if (!answer[name]) {
+            answer[name] = [];
+          }
+          answer[name].push(net.address);
+        }
+      }
+    }
+    return answer;
+  }
