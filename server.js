@@ -184,16 +184,29 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`UPDATE PlaceData SET Type=UUID_TO_BIN('${data["type"]}') WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
-                        if (error) {
-                            response.writeHead(500, { 'Content-Type': 'application/json' });
-                            response.end(JSON.stringify(error));
-                        } else {
-                            response.writeHead(200, { 'Content-Type': 'text/plain' });
-                            response.write("{\"status\": \"SUCESS\"}");
-                            response.end();
-                        }
-                    });
+                    if (data["type"] === "NULL") {
+                        connection.query(`UPDATE PlaceData SET Type=NULL WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
+                            if (error) {
+                                response.writeHead(500, { 'Content-Type': 'application/json' });
+                                response.end(JSON.stringify(error));
+                            } else {
+                                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                response.write("{\"status\": \"SUCESS\"}");
+                                response.end();
+                            }
+                        });
+                    } else {
+                        connection.query(`UPDATE PlaceData SET Type=UUID_TO_BIN('${data["type"]}') WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
+                            if (error) {
+                                response.writeHead(500, { 'Content-Type': 'application/json' });
+                                response.end(JSON.stringify(error));
+                            } else {
+                                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                response.write("{\"status\": \"SUCESS\"}");
+                                response.end();
+                            }
+                        });
+                    }
                 });
             break;
         case '/db/update_meatbut':
