@@ -340,6 +340,34 @@ http.createServer((request, response) => {
                 response.end("UNKNOWN REQUEST");
             }
             break;
+        case request.url.split('?')[0].startsWith("/media/") &&
+        (request.url.split('?')[0].endsWith(".png") || request.url.split('?')[0].endsWith(".jpg")) &&
+        request.url.split('?')[0]:
+            console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" WAS ACCESSED WITH ${request.method}`);
+            if (request.method === "GET") {
+                if (fs.existsSync(`.${request.url.split('?')[0]}`)) {
+                    if (request.url.split('?')[0].endsWith(".png")) {
+                        fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                            response.writeHead(200, { 'Content-Type': 'image/png' });
+                            response.write(data);
+                            response.end();
+                        })
+                    } else if (request.url.split('?')[0].endsWith(".jpg")) {
+                        fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                            response.writeHead(200, { 'Content-Type': 'image/jpg' });
+                            response.write(data);
+                            response.end();
+                        })
+                    }
+                } else {
+                    response.writeHead(404, { 'Content-Type': 'text/plain' });
+                    response.end("NOT FOUND");
+                }
+            } else {
+                response.writeHead(404, { 'Content-Type': 'text/plain' });
+                response.end("UNKNOWN REQUEST");
+            }
+            break;
         default:
             console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" IS 404`);
             response.writeHead(404, { 'Content-Type': 'text/plain' });
