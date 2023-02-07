@@ -24,21 +24,26 @@
     	<input type="button" onclick="add_type();" value="追加"><br>
     </div>
     <div id="caution" style="color: red;"></div>
-
-    <select name="example">
-        <option>選択肢のサンプル1</option>
-        <option>選択肢のサンプル2</option>
-        <option>選択肢のサンプル3</option>
-    </select>
-    <p>種類</p>
-    <div id="type_list">
+    <br>
+    <br>
+    肉まんの配置を変更する
+    <br>
+    
+    <div id="item-type">
+        <select name="item_selector" id="item_selector">
+            <option>Loading now...</option>
+        </select>
+        <div id="type_list">
+            <input id="delete_type_button" disabled type="button" onclick="delete_selectedType();" value="種類削除">
+        </div>
     </div>
-	<p>場所</p>
 	<div id="place_list">
     </div>
     
+    <div id="toast">
+    </div>
+
     <link rel="stylesheet" href="./admin.css">
     <script type="module" src="./admin.js"></script>
 </body>
-
 </html>
