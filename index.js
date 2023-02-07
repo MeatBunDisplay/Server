@@ -5,6 +5,8 @@ const date_element = document.getElementById("date");
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 const EDIT_TAB_COLOR = ["#E3FF93", "#FFF493", "#7EF4FC", "#D4ADCF", "#EF959D"];
 
+let meatbut_count = 0;
+
 /**
  * @type {[{
  *  id: string,
@@ -30,6 +32,7 @@ function set_meatbut_field(object) {
         [],
         []
     ];
+    meatbut_count = 0;
     if (object.length > 0) {
         object.forEach(element => {
             field[element.Layer][element.Number] = {
@@ -38,6 +41,7 @@ function set_meatbut_field(object) {
                 create_time: toMinutes(new Date(element.StartTime)),
                 finish_time: toMinutes(new Date(element.EndTime))
             };
+            meatbut_count++;
         });
     }
 }
@@ -284,10 +288,30 @@ window.decideAddItem = () => {
                         "start_date": adding.start_datetime
                     }, object => {
                         get_request("/db/get_meatbut", object => {
-                            synchronizing_element.style.visibility = "hidden";
                             set_meatbut_field(object);
-                            //sortField();
-                            updateRender();
+                            sortField();
+                            let cnt = 0;
+                            field.forEach((layer, layer_index) => {
+                                layer.forEach((meatbut, number_index) => {
+                                    cnt++;
+                                    if (cnt === meatbut_count) {
+                                        post_request("/db/update_meatbut", {
+                                            "id": meatbut.uuid,
+                                            "number": number_index,
+                                            "layer": layer_index
+                                        }, object => {
+                                            synchronizing_element.style.visibility = "hidden";
+                                            updateRender();
+                                        });
+                                    } else {
+                                        post_request("/db/update_meatbut", {
+                                            "id": meatbut.uuid,
+                                            "number": number_index,
+                                            "layer": layer_index
+                                        }, object => {});
+                                    }
+                                });
+                            });
                         });
                     });
                     return;
@@ -400,15 +424,20 @@ window.decideSaleItem = () => {
     finish += registered_nikuman[adding.id].time;
     let left = selling.sale;
     for (let j = 2; j >= 0; j--) {
-        for (let k = registered_nikuman[adding.id].place.length - 1; k >= 0; k--) {
-            if (field[registered_nikuman[adding.id].place[k]].length > j) {
-                post_request("/db/delete_meatbut", {
-                    id: (field[registered_nikuman[adding.id].place[k]].pop()).uuid
-                }, object => {});
+        for (let k = registered_nikuman[selling.id].place.length - 1; k >= 0; k--) {
+            if (field[registered_nikuman[selling.id].place[k]].length > j) {
                 left--;
                 if (left <= 0) {
-                    updateRender();
+                    post_request("/db/delete_meatbut", {
+                        id: (field[registered_nikuman[selling.id].place[k]].pop()).uuid
+                    }, object => {
+                        updateRender();
+                    });
                     return;
+                } else {
+                    post_request("/db/delete_meatbut", {
+                        id: (field[registered_nikuman[selling.id].place[k]].pop()).uuid
+                    }, object => {});
                 }
             }
         }
@@ -445,9 +474,11 @@ window.clickItem = (row, column) => {
 window.destroyItem = (row, column) => {
     let result = window.confirm(`${registered_nikuman[field[column][row].id].name}を廃棄します！よろしいですか？`);
     if (result) {
+        synchronizing_element.style.visibility = "visible";
         post_request("/db/delete_meatbut", {
             id: field[column][row].uuid
         }, object => {
+            meatbut_count--;
             field[column][row].create_time = -999999999;
             sortField();
             let index = -1;
@@ -459,6 +490,27 @@ window.destroyItem = (row, column) => {
                 }
             }
             field[index].pop();
+            let cnt = 0;
+            field.forEach((layer, layer_index) => {
+                layer.forEach((meatbut, number_index) => {
+                    cnt++;
+                    if (cnt === meatbut_count) {
+                        post_request("/db/update_meatbut", {
+                            "id": meatbut.uuid,
+                            "number": number_index,
+                            "layer": layer_index
+                        }, object => {
+                            synchronizing_element.style.visibility = "hidden";
+                        });
+                    } else {
+                        post_request("/db/update_meatbut", {
+                            "id": meatbut.uuid,
+                            "number": number_index,
+                            "layer": layer_index
+                        }, object => {});
+                    }
+                });
+            });
             let panel = document.getElementById('checkitem-panel');
             panel.style.display = "none";
         });
