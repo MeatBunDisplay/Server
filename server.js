@@ -465,7 +465,7 @@ http.createServer((request, response) => {
                                 response.writeHead(500, { 'Content-Type': 'application/json' });
                                 response.end(JSON.stringify(err));
                             } else {
-                                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                response.writeHead(200, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'OPTIONS, POST, GET' });
                                 response.end(fname);
                             }
                         });
