@@ -52,14 +52,15 @@ window.add_type = () => {
             const formData = new FormData();
             formData.append("image", file_data);
             fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
-                console.log(data.text());
-                /*post_request("db/add_type", {
-                    "name": window.document.getElementById("type_name").value,
-                    "price": window.document.getElementById("type_price").value,
-                    "time": window.document.getElementById("type_time").value + "00",
-                    "description": window.document.getElementById("type_description").value,
-                    "img": data
-                }, test_console_log);*/
+                data.text().then(text => {
+                    post_request("db/add_type", {
+                        "name": window.document.getElementById("type_name").value,
+                        "price": window.document.getElementById("type_price").value,
+                        "time": window.document.getElementById("type_time").value + "00",
+                        "description": window.document.getElementById("type_description").value,
+                        "img": text
+                    }, test_console_log);
+                });
             });
         } else {
             post_request("db/add_type", {
