@@ -341,9 +341,9 @@ http.createServer((request, response) => {
             }
             break;
         default:
-            console.log(`${new Date().toLocaleString()} : 404`);
+            console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" IS 404`);
             response.writeHead(404, { 'Content-Type': 'text/plain' });
-            response.end("UNKNOWN REQUEST");
+            response.end("NOT FOUND");
             break;
     }
 }).listen(HTTP_PORT);
