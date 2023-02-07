@@ -76,6 +76,17 @@ http.createServer((request, response) => {
                 }
             });
             break;
+        case '/db/get_fastest_mb':
+            connection.query('SELECT MBL.TypeName, COUNT(MBL.TypeName) AS Count, (IF(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))>=0, 0, ABS(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC;', function(error, results, fields) {
+                if (error) {
+                    response.writeHead(500, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(error));
+                } else {
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(results));
+                }
+            });
+            break;
         case '/db/add_place':
             data = '';
             request.on('data', function(chunk) { data += chunk })
@@ -159,16 +170,29 @@ http.createServer((request, response) => {
             request.on('data', function(chunk) { data += chunk })
                 .on('end', function() {
                     data = JSON.parse(data);
-                    connection.query(`UPDATE PlaceData SET Type=UUID_TO_BIN('${data["type"]}') WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
-                        if (error) {
-                            response.writeHead(500, { 'Content-Type': 'application/json' });
-                            response.end(JSON.stringify(error));
-                        } else {
-                            response.writeHead(200, { 'Content-Type': 'text/plain' });
-                            response.write("{\"status\": \"SUCESS\"}");
-                            response.end();
-                        }
-                    });
+                    if (data["type"] === "NULL") {
+                        connection.query(`UPDATE PlaceData SET Type=NULL WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
+                            if (error) {
+                                response.writeHead(500, { 'Content-Type': 'application/json' });
+                                response.end(JSON.stringify(error));
+                            } else {
+                                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                response.write("{\"status\": \"SUCESS\"}");
+                                response.end();
+                            }
+                        });
+                    } else {
+                        connection.query(`UPDATE PlaceData SET Type=UUID_TO_BIN('${data["type"]}') WHERE PlaceID=${data["place"]};`, function(error, results, fields) {
+                            if (error) {
+                                response.writeHead(500, { 'Content-Type': 'application/json' });
+                                response.end(JSON.stringify(error));
+                            } else {
+                                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                response.write("{\"status\": \"SUCESS\"}");
+                                response.end();
+                            }
+                        });
+                    }
                 });
             break;
         case '/db/update_meatbut':
