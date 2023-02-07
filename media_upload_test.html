@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<body>
+<input name="image-file" type="file" id="image-input" onChange="file_selected();" accept=".png,.jpg">
+<div id="preview-image"></div>
+<input type="button" onClick="submit_image();" value="送信">
+<script>
+const image_input = document.getElementById('image-input');
+const preview_image = document.getElementById('preview-image');
+const reader = new FileReader();
+
+let file_data;
+
+reader.onload = function (e) {
+    const imageUrl = e.target.result;
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    preview_image.innerHTML = "";
+    preview_image.appendChild(img);
+    file_data=e.currentTarget.result;
+}
+
+window.file_selected = () => {
+	reader.readAsDataURL(image_input.files[0]);
+}
+
+window.submit_image = () =>{
+	const formData = new FormData();
+	formData.append("image", file_data);
+	fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => console.log(data));
+}
+</script>
+</body>
+</html>
