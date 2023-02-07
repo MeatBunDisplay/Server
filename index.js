@@ -14,6 +14,7 @@ let meatbut_count = 0;
  *  price: number,
  *  time: number,
  *  description: string,
+ *  img: string,
  *  place: [number],
  * }]}
  */
@@ -69,12 +70,19 @@ function set_registered_type(object) {
     if (object.length > 0) {
         object.forEach(element => {
             let time = element["Time"];
+            let imgsrc = "";
+            if (element["ImageSrc"] === null) {
+                imgsrc = "";
+            } else {
+                imgsrc = "./media/" + element["ImageSrc"];
+            }
             registered_nikuman.push({
                 id: element["ID"],
                 name: element["Name"],
                 price: element["Price"],
                 time: Number(time.substring(0, time.indexOf(":"))) * 60 + Number(time.substring(time.indexOf(":") + 1, time.indexOf(":") + 3)),
                 description: element["Description"],
+                img: imgsrc,
                 place: []
             });
         });
@@ -145,6 +153,7 @@ function updateRender() {
         render_item.className = 'add-item';
         let render_image = document.createElement('div');
         render_image.className = 'add-item-image';
+        if (registered_nikuman[i].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[i].img})`;
         render_item.appendChild(render_image);
         let render_name = document.createElement('div');
         render_name.className = 'add-item-name';
