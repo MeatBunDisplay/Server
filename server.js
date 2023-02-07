@@ -62,7 +62,7 @@ http.createServer((request, response) => {
             break;
         case '/admin.css':
             fs.readFile('./admin.css', 'UTF-8', (error, data) => {
-                response.writeHead(200, { 'Content-Type': 'text/css'  });
+                response.writeHead(200, { 'Content-Type': 'text/css' });
                 response.write(data);
                 response.end();
             })
@@ -489,15 +489,15 @@ function getIpAddr() {
     let answer = Object.create(null);
     const nets = networkInterfaces();
     for (const name of Object.keys(nets)) {
-      for (const net of nets[name]) {
-        const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
-        if (net.family === familyV4Value && !net.internal) {
-          if (!answer[name]) {
-            answer[name] = [];
-          }
-          answer[name].push(net.address);
+        for (const net of nets[name]) {
+            const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+            if (net.family === familyV4Value && !net.internal) {
+                if (!answer[name]) {
+                    answer[name] = [];
+                }
+                answer[name].push(net.address);
+            }
         }
-      }
     }
     return answer;
-  }
+}

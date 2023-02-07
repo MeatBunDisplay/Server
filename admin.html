@@ -21,6 +21,8 @@
     	<input id="type_price" type="number" placeholder="価格" style="width: 5em;">円<br>
     	<input id="type_time" type="number" placeholder="時間" style="width: 5em;">分<br>
     	<input id="type_description" placeholder="説明" columns="30" rows="10"><br>
+    	<input id="type_image" name="image-file" type="file" id="image-input" onChange="file_selected();" accept=".png,.jpg,.jpeg"><br>
+    	<div id="preview-image"></div>
     	<input type="button" onclick="add_type();" value="追加"><br>
     </div>
     <div id="caution" style="color: red;"></div>
