@@ -404,6 +404,8 @@ window.changeSaleCount = (num) => {
 window.clickItem = (row, column) => {
     let panel = document.getElementById('checkitem-panel');
     let id = field[column][row].id;
+    let name = document.getElementById('checkitem-name');
+    name.innerText = `${registered_nikuman[id].name}`;
     let description = document.getElementById('checkitem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('checkitem-price');
