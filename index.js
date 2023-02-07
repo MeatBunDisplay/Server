@@ -1,5 +1,6 @@
 import { get_request, post_request } from "./database.js"
 
+const synchronizing_element = document.getElementById("synchronizing");
 const date_element = document.getElementById("date");
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 const EDIT_TAB_COLOR = ["#E3FF93", "#FFF493", "#7EF4FC", "#D4ADCF", "#EF959D"];
@@ -17,6 +18,18 @@ const EDIT_TAB_COLOR = ["#E3FF93", "#FFF493", "#7EF4FC", "#D4ADCF", "#EF959D"];
 let registered_nikuman = [];
 
 function set_meatbut_field(object) {
+    field = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ];
     if (object.length > 0) {
         object.forEach(element => {
             field[element.Layer][element.Number] = {
@@ -31,6 +44,7 @@ function set_meatbut_field(object) {
 
 function get_meatbut_data(object) {
     set_meatbut_field(object);
+    synchronizing_element.style.visibility = "hidden";
     setInterval(() => { loop(); }, 1000);
 }
 
@@ -158,6 +172,7 @@ function updateRender() {
                 item.innerText = ``;
                 continue;
             }
+            if (field[column][row] === undefined) { console.log("ソート後の順番が更新されていない可能性あり。"); continue; }
             if (toMinutes(nowdate) >= field[column][row].finish_time) {
                 item.innerText = `${registered_nikuman[field[column][row].id].name}\n調理済み!`
             } else {
@@ -256,28 +271,33 @@ window.decideAddItem = () => {
     let finish = adding.cook_minutes;
     finish += registered_nikuman[adding.id].time;
     let left = adding.cook;
+    synchronizing_element.style.visibility = "visible";
     for (let j = 0; j < 3; j++) {
         for (let k = 0; k < registered_nikuman[adding.id].place.length; k++) {
             if (field[registered_nikuman[adding.id].place[k]].length <= j) {
-                /*field[registered_nikuman[adding.id].place[k]][j] = {
-                    id: adding.id,
-                    create_time: adding.cook_minutes,
-                    finish_time: finish
-                };*/
-                post_request("/db/add_meatbut", {
-                    "type": registered_nikuman[adding.id].id,
-                    "number": j,
-                    "layer": registered_nikuman[adding.id].place[k],
-                    "start_date": adding.start_datetime
-                }, object => {});
                 left--;
                 if (left <= 0) {
-                    get_request("/db/get_meatbut", object => {
-                        set_meatbut_field(object);
-                        //sortField();
-                        updateRender();
+                    post_request("/db/add_meatbut", {
+                        "type": registered_nikuman[adding.id].id,
+                        "number": j,
+                        "layer": registered_nikuman[adding.id].place[k],
+                        "start_date": adding.start_datetime
+                    }, object => {
+                        get_request("/db/get_meatbut", object => {
+                            synchronizing_element.style.visibility = "hidden";
+                            set_meatbut_field(object);
+                            //sortField();
+                            updateRender();
+                        });
                     });
                     return;
+                } else {
+                    post_request("/db/add_meatbut", {
+                        "type": registered_nikuman[adding.id].id,
+                        "number": j,
+                        "layer": registered_nikuman[adding.id].place[k],
+                        "start_date": adding.start_datetime
+                    }, object => {});
                 }
             }
         }
@@ -492,4 +512,5 @@ loop();
 updateRender();
 changeTab("add");
 changeEditTab(0);
+synchronizing_element.visibility = "visible";
 get_request("/db/get_type", set_registered_type);
