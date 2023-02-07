@@ -229,7 +229,7 @@ http.createServer((request, response) => {
                 request.on('data', function(chunk) { data += chunk })
                     .on('end', function() {
                         data = JSON.parse(data);
-                        connection.query(`UPDATE MeatBut SET Number=${data["number"]}, Layer=${data["layer"]} WHERE ID=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
+                        connection.query(`UPDATE MeatBut SET Number=${data["number"]}, Layer=${data["layer"]} WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                             if (error) {
                                 response.writeHead(500, { 'Content-Type': 'application/json' });
                                 response.end(JSON.stringify(error));
