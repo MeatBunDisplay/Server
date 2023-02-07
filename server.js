@@ -131,16 +131,29 @@ http.createServer((request, response) => {
                 request.on('data', function(chunk) { data += chunk })
                     .on('end', function() {
                         data = JSON.parse(data);
-                        connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", NULL, CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
-                            if (error) {
-                                response.writeHead(500, { 'Content-Type': 'application/json' });
-                                response.end(JSON.stringify(error));
-                            } else {
-                                response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                response.write("{\"status\": \"SUCESS\"}");
-                                response.end();
-                            }
-                        });
+                        if (data["img"] === "NULL") {
+                            connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", NULL, CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
+                                if (error) {
+                                    response.writeHead(500, { 'Content-Type': 'application/json' });
+                                    response.end(JSON.stringify(error));
+                                } else {
+                                    response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.end();
+                                }
+                            });
+                        } else {
+                            connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", "${data["img"]}", CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
+                                if (error) {
+                                    response.writeHead(500, { 'Content-Type': 'application/json' });
+                                    response.end(JSON.stringify(error));
+                                } else {
+                                    response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.end();
+                                }
+                            });
+                        }
                     });
             } else {
                 response.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -168,6 +181,43 @@ http.createServer((request, response) => {
                             });
                         } else {
                             connection.query(`INSERT MeatBut VALUES(UUID_TO_BIN(UUID()), UUID_TO_BIN('${data["type"]}'), ${data["number"]}, ${data["layer"]}, CAST('${data["start_time"]}' AS DATETIME), ADDTIME(CAST('${data["start_time"]}' AS DATETIME), (SELECT Time FROM MeatButType WHERE ID=UUID_TO_BIN('${data["type"]}'))));`, function(error, results, fields) {
+                                if (error) {
+                                    response.writeHead(500, { 'Content-Type': 'application/json' });
+                                    response.end(JSON.stringify(error));
+                                } else {
+                                    response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.end();
+                                }
+                            });
+                        }
+                    });
+            } else {
+                response.writeHead(404, { 'Content-Type': 'text/plain' });
+                response.end("UNKNOWN REQUEST");
+            }
+
+            break;
+        case '/db/update_type':
+            console.log(`${new Date().toLocaleString()} : "/db/update_type" WAS ACCESSED WITH ${request.method}`);
+            if (request.method === "POST") {
+                data = '';
+                request.on('data', function(chunk) { data += chunk })
+                    .on('end', function() {
+                        data = JSON.parse(data);
+                        if (data["img"] === "NULL") {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME)) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                                if (error) {
+                                    response.writeHead(500, { 'Content-Type': 'application/json' });
+                                    response.end(JSON.stringify(error));
+                                } else {
+                                    response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.end();
+                                }
+                            });
+                        } else {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME)) WHERE ID=${data["id"]};`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -341,7 +391,7 @@ http.createServer((request, response) => {
             }
             break;
         case request.url.split('?')[0].startsWith("/media/") &&
-        (request.url.split('?')[0].endsWith(".png") || request.url.split('?')[0].endsWith(".jpg")) &&
+        (request.url.split('?')[0].endsWith(".png") || request.url.split('?')[0].endsWith(".jpg") || request.url.split('?')[0].endsWith(".jpeg")) &&
         request.url.split('?')[0]:
             console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" WAS ACCESSED WITH ${request.method}`);
             if (request.method === "GET") {
@@ -352,7 +402,7 @@ http.createServer((request, response) => {
                             response.write(data);
                             response.end();
                         })
-                    } else if (request.url.split('?')[0].endsWith(".jpg")) {
+                    } else if (request.url.split('?')[0].endsWith(".jpg") || request.url.split('?')[0].endsWith(".jpeg")) {
                         fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
                             response.writeHead(200, { 'Content-Type': 'image/jpg' });
                             response.write(data);
@@ -363,6 +413,31 @@ http.createServer((request, response) => {
                     response.writeHead(404, { 'Content-Type': 'text/plain' });
                     response.end("NOT FOUND");
                 }
+            } else {
+                response.writeHead(404, { 'Content-Type': 'text/plain' });
+                response.end("UNKNOWN REQUEST");
+            }
+            break;
+        case "/upload/image":
+            console.log(`${new Date().toLocaleString()} : "/upload/image" WAS ACCESSED  WITH ${request.method}`);
+            if (request.method === "POST" && request.headers.hasOwnProperty('content-type') && request.headers['content-type'].indexOf('multipart/form-data;') > -1 && request.headers['content-type'].indexOf('boundary=') > -1) {
+                data = '';
+                request.on('data', function(chunk) { data += chunk })
+                    .on('end', function() {
+                        data = data.split(request.headers['content-type'].split('boundary=')[1]);
+                        let fname = new Date().toLocaleString().replaceAll("/", "-").replace(" ", "T").replaceAll(":", "-") + "." + data[1].substring(data[1].indexOf("data:image/") + "data:image/".length, data[1].indexOf(";base64,"));
+                        let b64data = data[1].substring(data[1].indexOf("data:image/"), data[1].length);
+                        b64data = b64data.substring(b64data.indexOf("base64,") + "base64,".length, b64data.indexOf("\n"));
+                        fs.writeFile(`./media/${fname}`, b64data, 'base64', (err) => {
+                            if (err) {
+                                response.writeHead(500, { 'Content-Type': 'application/json' });
+                                response.end(JSON.stringify(err));
+                            } else {
+                                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                                response.end(fname);
+                            }
+                        });
+                    });
             } else {
                 response.writeHead(404, { 'Content-Type': 'text/plain' });
                 response.end("UNKNOWN REQUEST");
