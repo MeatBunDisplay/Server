@@ -17,42 +17,8 @@
     <div id="meatbuts">
     </div>
 
-    <link rel="stylesheet" href="./index.css">
-    <script type="module">
-        import { get_request, post_request } from "./database.js";
-
-        let nowdate;
-        let least_data;
-        const meatbuts = window.document.getElementById("meatbuts");
-        const date_element = window.document.getElementById("date");
-        const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
-        function loop() {
-            nowdate = new Date();
-            date_element.innerText = `${nowdate.getFullYear()}年${nowdate.getMonth()+1}月${nowdate.getDate()}日(${WEEK[nowdate.getDay()]}) ${nowdate.getHours().toString().padStart(2, "0")}:${nowdate.getMinutes().toString().padStart(2, "0")}:${nowdate.getSeconds().toString().padStart(2, "0")}`;
-            get_request("/db/get_fastest_mb", object => {
-                if(JSON.stringify(object)!=least_data){
-                    meatbuts.innerHTML="";
-                    object.forEach(element => {
-                        let state;
-                        if(element["TimeLeft"]===0){
-                            state = element["Count"] + "個蒸されています";
-                        }
-                        else{
-                            state = "あと" + element["TimeLeft"] + "分";
-                        }
-                        meatbuts.insertAdjacentHTML('beforeend', `<div class="edit-item">${element["TypeName"]}<br>${state}</div>`);
-                    });
-                    least_data=JSON.stringify(object);
-                } else {
-                    //
-                }
-            });
-        }
-        loop();
-        setInterval(() => {
-            loop();
-        }, 1000);
-    </script>
+    <link rel="stylesheet" href="./visualizer.css">
+    <script type="module" src="./visualizer.js"></script>
 </body>
 
 </html>

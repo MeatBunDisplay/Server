@@ -199,27 +199,28 @@ function changeItem() {
     selected_id = item_selector.value;
     if (selected_id != "") {
         delete_type_button.removeAttribute("disabled");
+        const ltd = JSON.parse(least_type_data);
+        const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
+        const type_time = type_data["Time"].split(":");
+        window.document.getElementById("tname_input").value = type_data["Name"];
+        window.document.getElementById("tprice_input").value = type_data["Price"];
+        window.document.getElementById("ttime_input").value = (Number(type_time[0]) * 60) + Number(type_time[1]);
+        window.document.getElementById("tdesc_input").value = type_data["Description"];
+        if (type_data["ImageSrc"] != null) {
+            const img = document.createElement("img");
+            img.src = `./media/${type_data["ImageSrc"]}`;
+            img.style.width = "100px";
+            img.style.height = "100px";
+            epreview_image.innerHTML = "";
+            epreview_image.appendChild(img);
+        } else {
+            eclear_finput();
+        }
+        efile_update = false;
     } else {
         delete_type_button.setAttribute("disabled", true);
     }
-    const ltd = JSON.parse(least_type_data);
-    const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
-    const type_time = type_data["Time"].split(":");
-    window.document.getElementById("tname_input").value = type_data["Name"];
-    window.document.getElementById("tprice_input").value = type_data["Price"];
-    window.document.getElementById("ttime_input").value = (Number(type_time[0]) * 60) + Number(type_time[1]);
-    window.document.getElementById("tdesc_input").value = type_data["Description"];
-    if (type_data["ImageSrc"] != null) {
-        const img = document.createElement("img");
-        img.src = `./media/${type_data["ImageSrc"]}`;
-        img.style.width = "100px";
-        img.style.height = "100px";
-        epreview_image.innerHTML = "";
-        epreview_image.appendChild(img);
-    } else {
-        eclear_finput();
-    }
-    efile_update = false;
+    
     const edit_item = document.getElementsByClassName("edit-item");
     for (let i = 0; i < edit_item.length; i++) {
         if (edit_item[i].classList.contains(selected_id)) {

@@ -133,7 +133,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -144,7 +144,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -170,7 +170,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -181,7 +181,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -207,7 +207,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -218,7 +218,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -244,7 +244,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -255,7 +255,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -281,7 +281,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -292,7 +292,7 @@ http.createServer((request, response) => {
                                     response.end(JSON.stringify(error));
                                 } else {
                                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                    response.write("{\"status\": \"SUCESS\"}");
+                                    response.write("{\"status\": \"SUCCESS\"}");
                                     response.end();
                                 }
                             });
@@ -317,7 +317,7 @@ http.createServer((request, response) => {
                                 response.end(JSON.stringify(error));
                             } else {
                                 response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                response.write("{\"status\": \"SUCESS\"}");
+                                response.write("{\"status\": \"SUCCESS\"}");
                                 response.end();
                             }
                         });
@@ -341,7 +341,7 @@ http.createServer((request, response) => {
                                 response.end(JSON.stringify(error));
                             } else {
                                 response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                response.write("{\"status\": \"SUCESS\"}");
+                                response.write("{\"status\": \"SUCCESS\"}");
                                 response.end();
                             }
                         });
@@ -365,7 +365,7 @@ http.createServer((request, response) => {
                                 response.end(JSON.stringify(error));
                             } else {
                                 response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                response.write("{\"status\": \"SUCESS\"}");
+                                response.write("{\"status\": \"SUCCESS\"}");
                                 response.end();
                             }
                         });
@@ -389,7 +389,7 @@ http.createServer((request, response) => {
                                 response.end(JSON.stringify(error));
                             } else {
                                 response.writeHead(200, { 'Content-Type': 'text/plain' });
-                                response.write("{\"status\": \"SUCESS\"}");
+                                response.write("{\"status\": \"SUCCESS\"}");
                                 response.end();
                             }
                         });
