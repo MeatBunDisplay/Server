@@ -155,6 +155,7 @@ window.esubmit = () => {
     const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
     if ((efile_update && efile_data == "") || (!efile_update && ltd["ImageSrc"] == null)) {
         post_request("/db/update_type", {
+            id: selected_id,
             name: window.document.getElementById("tname_input").value,
             price: window.document.getElementById("tprice_input").value,
             time: window.document.getElementById("ttime_input").value + "00",
@@ -181,6 +182,7 @@ window.esubmit = () => {
             });
         }*/
         post_request("/db/update_type", {
+            id: selected_id,
             name: window.document.getElementById("tname_input").value,
             price: window.document.getElementById("tprice_input").value,
             time: window.document.getElementById("ttime_input").value + "00",
