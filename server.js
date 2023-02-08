@@ -443,6 +443,38 @@ http.createServer((request, response) => {
                 response.end("UNKNOWN REQUEST");
             }
             break;
+        case request.url.split('?')[0].startsWith("/fonts/") &&
+            (request.url.split('?')[0].endsWith(".woff") || request.url.split('?')[0].endsWith(".ttf") || request.url.split('?')[0].endsWith(".eot") || request.url.split('?')[0].endsWith(".otf")) &&
+            request.url.split('?')[0]:
+            if(request.url.split('?')[0].endsWith(".woff")){
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/font-woff' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            if(request.url.split('?')[0].endsWith(".ttf")){
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/font-ttf' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            if(request.url.split('?')[0].endsWith(".eot")){
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/vnd.ms-fontobject' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            if(request.url.split('?')[0].endsWith(".otf")){
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/font-otf' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            break;
         default:
             console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" IS 404`);
             response.writeHead(404, { 'Content-Type': 'text/plain' });
