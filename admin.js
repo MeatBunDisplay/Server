@@ -15,8 +15,13 @@ let selected_id = "";
 
 const image_input = document.getElementById('type_image');
 const preview_image = document.getElementById('preview-image');
+const eimage_input = document.getElementById('timage_input');
+const epreview_image = document.getElementById('epreview-image');
 const reader = new FileReader();
+const ereader = new FileReader();
 let file_data;
+let efile_data;
+let efile_update = false;
 
 reader.onload = function(e) {
     const imageUrl = e.target.result;
@@ -29,6 +34,17 @@ reader.onload = function(e) {
     file_data = e.currentTarget.result;
 }
 
+ereader.onload = function(e) {
+    const imageUrl = e.target.result;
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    img.style.width = "100px";
+    img.style.height = "100px";
+    epreview_image.innerHTML = "";
+    epreview_image.appendChild(img);
+    efile_data = e.currentTarget.result;
+}
+
 window.clear_finput = () => {
     image_input.value = "";
     file_data = "";
@@ -37,6 +53,16 @@ window.clear_finput = () => {
 
 window.file_selected = () => {
     reader.readAsDataURL(image_input.files[0]);
+}
+
+window.eclear_finput = () => {
+    eimage_input.value = "";
+    efile_data = "";
+    epreview_image.innerHTML = "";
+}
+
+window.efile_selected = () => {
+    ereader.readAsDataURL(eimage_input.files[0]);
 }
 
 function test_console_log(object) {
@@ -123,6 +149,50 @@ window.delete_selectedType = () => {
     loop();
 }
 
+window.esubmit = () => {
+    selected_id = item_selector.value;
+    const ltd = JSON.parse(least_type_data);
+    const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
+    if ((efile_update && efile_data == "") || (!efile_update && ltd["ImageSrc"] == null)) {
+        post_request("/db/update_type", {
+            name: window.document.getElementById("tname_input").value,
+            price: window.document.getElementById("tprice_input").value,
+            time: window.document.getElementById("ttime_input").value + "00",
+            description: window.document.getElementById("tdesc_input").value,
+            img: "NULL"
+        }, object => {
+            efile_update = false;
+            test_console_log(object);
+        });
+    } else {
+        /*if (efile_update) {
+            const formData = new FormData();
+            formData.append("image", efile_data);
+            fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
+                data.text().then(text => {
+                    post_request("db/add_type", {
+                        "name": window.document.getElementById("type_name").value,
+                        "price": window.document.getElementById("type_price").value,
+                        "time": window.document.getElementById("type_time").value + "00",
+                        "description": window.document.getElementById("type_description").value,
+                        "img": text
+                    }, test_console_log);
+                });
+            });
+        }*/
+        post_request("/db/update_type", {
+            name: window.document.getElementById("tname_input").value,
+            price: window.document.getElementById("tprice_input").value,
+            time: window.document.getElementById("ttime_input").value + "00",
+            description: window.document.getElementById("tdesc_input").value,
+            img: type_data["ImageSrc"]
+        }, object => {
+            efile_update = false;
+            test_console_log(object);
+        });
+    }
+}
+
 function changeItem() {
     selected_id = item_selector.value;
     if (selected_id != "") {
@@ -130,6 +200,24 @@ function changeItem() {
     } else {
         delete_type_button.setAttribute("disabled", true);
     }
+    const ltd = JSON.parse(least_type_data);
+    const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
+    const type_time = type_data["Time"].split(":");
+    window.document.getElementById("tname_input").value = type_data["Name"];
+    window.document.getElementById("tprice_input").value = type_data["Price"];
+    window.document.getElementById("ttime_input").value = (Number(type_time[0]) * 60) + Number(type_time[1]);
+    window.document.getElementById("tdesc_input").value = type_data["Description"];
+    if (type_data["ImageSrc"] != null) {
+        const img = document.createElement("img");
+        img.src = `./media/${type_data["ImageSrc"]}`;
+        img.style.width = "100px";
+        img.style.height = "100px";
+        epreview_image.innerHTML = "";
+        epreview_image.appendChild(img);
+    } else {
+        eclear_finput();
+    }
+    efile_update = false;
     const edit_item = document.getElementsByClassName("edit-item");
     for (let i = 0; i < edit_item.length; i++) {
         if (edit_item[i].classList.contains(selected_id)) {
@@ -159,8 +247,8 @@ function loop() {
                 //type_list.insertAdjacentHTML('beforeend', `<div class="edit-item ${element["ID"]}">${element["Name"]}<br><!--${element["Price"]}円<br>--><input type="button" onclick="delete_type('${element["ID"]}');" value="種類削除"></div>`);
                 item_selector.insertAdjacentHTML('beforeend', `<option value=${element["ID"]}>${element["Name"]}</option>`);
             });
-            changeItem();
             least_type_data = JSON.stringify(object);
+            changeItem();
         } else {
             //
         }

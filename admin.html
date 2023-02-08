@@ -29,7 +29,7 @@
     <div id="caution" style="color: red;"></div>
     <br>
     <br>
-    肉まんの配置を変更する
+    肉まんの情報・配置を変更する
     <br>
     
     <div id="item-type">
@@ -37,6 +37,14 @@
             <option>Loading now...</option>
         </select>
         <div id="type_list">
+        	<input id="tname_input" placeholder="名前"><br>
+	    	<input id="tprice_input" type="number" placeholder="価格" style="width: 5em;">円<br>
+	    	<input id="ttime_input" type="number" placeholder="時間" style="width: 5em;">分<br>
+	    	<input id="tdesc_input" placeholder="説明" columns="30" rows="10"><br>
+	    	<input id="timage_clear" type="button" onClick="eclear_finput();" value="クリア" disabled>
+	    	<input id="timage_input" name="image-file" type="file" onChange="efile_selected();" accept=".png,.jpg,.jpeg" disabled><br>
+	    	<div id="epreview-image"></div>
+	    	<input id="esubmit" type="button" onClick="esubmit();" value="更新">
             <input id="delete_type_button" disabled type="button" onclick="delete_selectedType();" value="種類削除">
         </div>
     </div>
