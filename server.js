@@ -238,7 +238,7 @@ http.createServer((request, response) => {
                     .on('end', function() {
                         data = JSON.parse(data);
                         if (data["img"] === "NULL") {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME)) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=${data["id"]};`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -249,7 +249,7 @@ http.createServer((request, response) => {
                                 }
                             });
                         } else {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME)) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=${data["id"]};`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -476,30 +476,30 @@ http.createServer((request, response) => {
             }
             break;
         case request.url.split('?')[0].startsWith("/fonts/") &&
-            (request.url.split('?')[0].endsWith(".woff") || request.url.split('?')[0].endsWith(".ttf") || request.url.split('?')[0].endsWith(".eot") || request.url.split('?')[0].endsWith(".otf")) &&
-            request.url.split('?')[0]:
-            if(request.url.split('?')[0].endsWith(".woff")){
+        (request.url.split('?')[0].endsWith(".woff") || request.url.split('?')[0].endsWith(".ttf") || request.url.split('?')[0].endsWith(".eot") || request.url.split('?')[0].endsWith(".otf")) &&
+        request.url.split('?')[0]:
+            if (request.url.split('?')[0].endsWith(".woff")) {
                 fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
                     response.writeHead(200, { 'Content-Type': 'application/font-woff' });
                     response.write(data);
                     response.end();
                 })
             }
-            if(request.url.split('?')[0].endsWith(".ttf")){
+            if (request.url.split('?')[0].endsWith(".ttf")) {
                 fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
                     response.writeHead(200, { 'Content-Type': 'application/font-ttf' });
                     response.write(data);
                     response.end();
                 })
             }
-            if(request.url.split('?')[0].endsWith(".eot")){
+            if (request.url.split('?')[0].endsWith(".eot")) {
                 fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
                     response.writeHead(200, { 'Content-Type': 'application/vnd.ms-fontobject' });
                     response.write(data);
                     response.end();
                 })
             }
-            if(request.url.split('?')[0].endsWith(".otf")){
+            if (request.url.split('?')[0].endsWith(".otf")) {
                 fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
                     response.writeHead(200, { 'Content-Type': 'application/font-otf' });
                     response.write(data);
