@@ -22,11 +22,17 @@ reader.onload = function(e) {
     const imageUrl = e.target.result;
     const img = document.createElement("img");
     img.src = imageUrl;
-    img.style.width = 100;
-    img.style.height = 100;
+    img.style.width = "100px";
+    img.style.height = "100px";
     preview_image.innerHTML = "";
     preview_image.appendChild(img);
     file_data = e.currentTarget.result;
+}
+
+window.clear_finput = () => {
+    image_input.value = "";
+    file_data = "";
+    preview_image.innerHTML = "";
 }
 
 window.file_selected = () => {
@@ -48,7 +54,7 @@ window.add_type = () => {
         window.document.getElementById("type_time").value != "" &&
         window.document.getElementById("type_description").value != "") {
         window.document.getElementById("caution").innerText = "";
-        if (image_input.files.length > 0) {
+        if (image_input.files.length > 0 && file_data != "") {
             const formData = new FormData();
             formData.append("image", file_data);
             fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
@@ -180,6 +186,8 @@ function loop() {
         }
     });
 }
+
+clear_finput();
 loop();
 setInterval(() => {
     loop();
