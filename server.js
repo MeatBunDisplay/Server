@@ -3,6 +3,7 @@ const HTTP_PORT = 80;
 const http = require('http');
 const fs = require('fs');
 const mysql = require('mysql');
+const { networkInterfaces } = require('os');
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -10,12 +11,29 @@ const connection = mysql.createConnection({
     database: 'MeatButDB'
 });
 
+const iplist = getIpAddr();
+const ip = iplist[Object.keys(iplist)[0]][0];
+
 let data = '';
 
 http.createServer((request, response) => {
     switch (request.url.split('?')[0]) {
         case '/index':
             fs.readFile('./index.html', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/html' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/visualizer':
+            fs.readFile('./visualizer.html', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/html' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/admin':
+            fs.readFile('./admin.html', 'UTF-8', (error, data) => {
                 response.writeHead(200, { 'Content-Type': 'text/html' });
                 response.write(data);
                 response.end();
@@ -30,6 +48,20 @@ http.createServer((request, response) => {
             break;
         case '/index.css':
             fs.readFile('./index.css', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/css' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/admin.js':
+            fs.readFile('./admin.js', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/javascript' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/admin.css':
+            fs.readFile('./admin.css', 'UTF-8', (error, data) => {
                 response.writeHead(200, { 'Content-Type': 'text/css' });
                 response.write(data);
                 response.end();
@@ -206,7 +238,7 @@ http.createServer((request, response) => {
                     .on('end', function() {
                         data = JSON.parse(data);
                         if (data["img"] === "NULL") {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME)) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -217,7 +249,7 @@ http.createServer((request, response) => {
                                 }
                             });
                         } else {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME)) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -443,6 +475,38 @@ http.createServer((request, response) => {
                 response.end("UNKNOWN REQUEST");
             }
             break;
+        case request.url.split('?')[0].startsWith("/fonts/") &&
+        (request.url.split('?')[0].endsWith(".woff") || request.url.split('?')[0].endsWith(".ttf") || request.url.split('?')[0].endsWith(".eot") || request.url.split('?')[0].endsWith(".otf")) &&
+        request.url.split('?')[0]:
+            if (request.url.split('?')[0].endsWith(".woff")) {
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/font-woff' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            if (request.url.split('?')[0].endsWith(".ttf")) {
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/font-ttf' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            if (request.url.split('?')[0].endsWith(".eot")) {
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/vnd.ms-fontobject' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            if (request.url.split('?')[0].endsWith(".otf")) {
+                fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                    response.writeHead(200, { 'Content-Type': 'application/font-otf' });
+                    response.write(data);
+                    response.end();
+                })
+            }
+            break;
         default:
             console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" IS 404`);
             response.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -451,4 +515,21 @@ http.createServer((request, response) => {
     }
 }).listen(HTTP_PORT);
 console.log(`HTTPサーバをポート${HTTP_PORT}番に立てたよ!!!!!`);
-console.log(`http://localhost:${HTTP_PORT}/index`);
+console.log(`http://${ip}:${HTTP_PORT}/index`);
+
+function getIpAddr() {
+    let answer = Object.create(null);
+    const nets = networkInterfaces();
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+            if (net.family === familyV4Value && !net.internal) {
+                if (!answer[name]) {
+                    answer[name] = [];
+                }
+                answer[name].push(net.address);
+            }
+        }
+    }
+    return answer;
+}

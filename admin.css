@@ -1,0 +1,49 @@
+.edit-place{
+    text-align: center;
+}
+
+#item-type{
+    text-align: center;
+    align-items: center;
+}
+
+#item_selector{
+    text-align: center;
+    align-items: center;
+}
+
+#type_list{
+    text-align: center;
+}
+
+#place_list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+select {
+	width: 40%;
+	margin: 1em 0;
+	padding: .8em 1em;
+	font-size: 16px;
+	border-radius: 30px;
+	border: solid 2px #ccc;
+	background-repeat: no-repeat;
+	background-size: 18px 10px;
+    background-position: right 20px center;
+	background-color: #fff;
+}
+
+#toast{
+    position: fixed;
+    bottom: 5vh;
+    left: 20vw;
+    height: 5vh;
+    width: 60vh;
+    border-radius: 2.5vh;
+    display: none;
+    text-align: center;
+    line-height: 5vh;
+    color: red;
+    background-color: #eee;
+}

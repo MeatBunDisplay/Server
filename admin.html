@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>肉まん表示マンー管理画面</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header id="header">
+        <div id="title">管理者用肉まん管理画面</div>
+        <div id="date">1970年01月01日 (日) 12:34</div>
+    </header>
+    <br>
+    肉まんの種類を追加する
+    <div>
+    	<input id="type_name" placeholder="名前"><br>
+    	<input id="type_price" type="number" placeholder="価格" style="width: 5em;">円<br>
+    	<input id="type_time" type="number" placeholder="時間" style="width: 5em;">分<br>
+    	<input id="type_description" placeholder="説明" columns="30" rows="10"><br>
+    	<input id="type_image_clear" type="button" onClick="clear_finput();" value="クリア">
+    	<input id="type_image" name="image-file" type="file" onChange="file_selected();" accept=".png,.jpg,.jpeg"><br>
+    	<div id="preview-image"></div>
+    	<input type="button" onclick="add_type();" value="追加"><br>
+    </div>
+    <div id="caution" style="color: red;"></div>
+    <br>
+    <br>
+    肉まんの情報・配置を変更する
+    <br>
+    
+    <div id="item-type">
+        <select name="item_selector" id="item_selector">
+            <option>Loading now...</option>
+        </select>
+        <div id="type_list">
+        	<input id="tname_input" placeholder="名前"><br>
+	    	<input id="tprice_input" type="number" placeholder="価格" style="width: 5em;">円<br>
+	    	<input id="ttime_input" type="number" placeholder="時間" style="width: 5em;">分<br>
+	    	<input id="tdesc_input" placeholder="説明" columns="30" rows="10"><br>
+	    	<input id="timage_clear" type="button" onClick="eclear_finput();" value="クリア" disabled>
+	    	<input id="timage_input" name="image-file" type="file" onChange="efile_selected();" accept=".png,.jpg,.jpeg" disabled><br>
+	    	<div id="epreview-image"></div>
+	    	<input id="esubmit" type="button" onClick="esubmit();" value="更新">
+            <input id="delete_type_button" disabled type="button" onclick="delete_selectedType();" value="種類削除">
+        </div>
+    </div>
+	<div id="place_list">
+    </div>
+    
+    <div id="toast">
+    </div>
+
+    <link rel="stylesheet" href="./admin.css">
+    <script type="module" src="./admin.js"></script>
+</body>
+</html>
