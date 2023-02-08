@@ -1,5 +1,11 @@
+@font-face{
+    font-family: 'M PLUS Rounded 1c';
+    src: local('./fonts/MPLUSRounded1c.ttf');
+}
+
 html {
     height: 100%;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 body {
@@ -88,7 +94,7 @@ body {
     width: 100px;
     border: 1px solid black;
     background-color: aquamarine;
-    background-size: 100px 100px;
+    background-size: cover;
 }
 
 .add-item-name {
@@ -151,20 +157,44 @@ body {
     z-index: 10;
 }
 
-#additem-close {
-    padding-left: 5px;
+.popup-title {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #888888;
+    padding: 0.25rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.popup-title p {
+    font-size: 1.1rem;
+}
+
+.popup-title svg {
     color: red;
     user-select: none;
     cursor: pointer;
-    font-size: large;
+    padding: 0.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-left: auto;
 }
 
 #additem-settime {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 30vw;
     text-align: center;
 }
 
+#additem-start {
+    padding: 0 0.25rem;
+}
+
 #additem-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 30vw;
     text-align: center;
 }
@@ -174,6 +204,9 @@ body {
 }
 
 #additem-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 30vw;
     text-align: center;
 }
@@ -184,6 +217,7 @@ body {
     margin: auto;
     border: 1px solid black;
     background-color: aquamarine;
+    background-size: cover;
 }
 
 #additem-name {
@@ -192,10 +226,11 @@ body {
 
 .change-cook-button {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: aqua;
-    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+    background-color: #8bb6f7;
+    /* box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5); */
     border-radius: 50%;
     text-align: center;
     user-select: none;
@@ -204,14 +239,21 @@ body {
 
 .change-time-button {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: aqua;
-    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+    background-color: #8bb6f7;
+    /* box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5); */
     border-radius: 50%;
     text-align: center;
     user-select: none;
     cursor: pointer;
+}
+
+.control-menu-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 #checkitem-panel {
@@ -245,7 +287,16 @@ body {
     width: 100px;
     border: 1px solid black;
     background-color: aquamarine;
-    background-size: 100px 100px;
+    background-size: cover;
+}
+
+#saleitem-image {
+    height: 100px;
+    width: 100px;
+    margin: auto;
+    border: 1px solid black;
+    background-color: aquamarine;
+    background-size: cover;
 }
 
 .sale-item-name {
@@ -255,28 +306,32 @@ body {
 #saleitem-panel {
     background-color: aliceblue;
     position: fixed;
-    top: 5vh;
-    height: 80vh;
-    width: 90vw;
+    top: 50%;
+    height: fit-content;
+    width: fit-content;
+    min-width: 70vw;
+    min-height: 80vh;
     border-radius: 8px;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     left: 50%;
     border: 2px solid black;
-    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    box-shadow: 0 10px 25px 0 rgb(0 0 0 / 50%);
     display: none;
     z-index: 10;
 }
 
 #saleitem-close {
-    padding-left: 5px;
     color: red;
     user-select: none;
     cursor: pointer;
-    font-size: large;
+    padding: 0.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-left: auto;
 }
 
 #saleitem-text {
-    width: 30%;
+    width: 50%;
     text-align: center;
 }
 
@@ -285,16 +340,20 @@ body {
 }
 
 #saleitem-button {
-    width: 30%;
+    width: 50%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .change-sale-button {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: aqua;
-    box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5);
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
+    background-color: #8bb6f7;
+    /* box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5); */
     border-radius: 50%;
     text-align: center;
     user-select: none;
@@ -331,6 +390,7 @@ body {
     margin: auto;
     border: 1px solid black;
     background-color: aquamarine;
+    background-size: cover;
 }
 
 #checkitem-description {

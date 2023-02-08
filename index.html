@@ -1,131 +1,193 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>肉まん表示マン</title>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div id="panel-bg"></div>
-        <header id="header">
-            <div id="title">在电脑上显示肉包子的装置<div id="synchronizing"></div></div>
-            <div id="date">1970年01月01日 (日) 12:34</div>
-        </header>
-        <br>
-        <div id="tab">
-            <span id="add" class="tab-selector" onclick="changeTab('add');">肉まんを追加する</span>
-            <span id="sale" class="tab-selector" onclick="changeTab('sale');">肉まんを売る</span>
-            <span id="edit" class="tab-selector" onclick="changeTab('edit');">現在の肉まんを確認する</span>
-        </div>
-        <div id="add-panel" class="panel">
-            &nbsp;追加する肉まんを選択してください。
-            <div id="add-items">
-            </div>
-        </div>
-        <div id="sale-panel" class="panel">
-            &nbsp;販売した肉まんを選択してください。
-            <div id="sale-items">
-            </div>
-        </div>
-        <div id="edit-panel" class="panel">
-            <div id="edit-tab">
-                <span id="edit-1" class="edit-tab-selector" onclick="changeEditTab(0);">1段目</span>
-                <span id="edit-2" class="edit-tab-selector" onclick="changeEditTab(1);">2段目</span>
-                <span id="edit-3" class="edit-tab-selector" onclick="changeEditTab(2);">3段目</span>
-                <span id="edit-4" class="edit-tab-selector" onclick="changeEditTab(3);">4段目</span>
-                <span id="edit-5" class="edit-tab-selector" onclick="changeEditTab(4);">5段目</span>
-            </div>
-            <div id="item-selectors">
-            </div>
-        </div>
-        <div id="additem-panel">
-            <span id="additem-close" onclick="document.getElementById('additem-panel').style.display='none';panel_bg.style.display='none';">×</span>
-            <br>
-            &nbsp;肉まんの個数を設定してください
-            <hr>
-            <div style="display:flex">
-                <div id="additem-settime">
-                    調理開始時間<br>
-                    <span id="additem-verylate" class="change-time-button" onclick="changeCookTime(-10);">&lt;</span>
-                    <span id="additem-late" class="change-time-button" onclick="changeCookTime(-1);">-</span>
-                    <span id="additem-start">12:34</span>
-                    <span id="additem-early" class="change-time-button" onclick="changeCookTime(1);">+</span>
-                    <span id="additem-veryearly" class="change-time-button" onclick="changeCookTime(10);">&gt;</span>
-                    <br><br>
-                    必要蒸し時間
-                    <div id="additem-time">50分</div>
-                    <br>
-                    調理完了時間
-                    <div id="additem-end">13:24</div>
-                </div>
-                <div id="additem-text">
-                    <div id="additem-name">TESTまん</div>
-                    <div id="additem-image"></div>
-                    <div id="additem-price">100円</div>
-                    <br>
-                    <div id="additem-description"></div>
-                </div>
-                <div id="additem-button">
-                    <div id="additem-cooking">蒸し中の個数:100</div>
-                    <div id="additem-cooked">蒸しあがった個数:200</div>
-                    <br>
-                    <div id="additem-cook-div">
-                        <span id="additem-minus" class="change-cook-button" onclick="changeCookCount(-1);">-</span>
-                        <span id="additem-cook">追加する個数:300</span>
-                        <span id="additem-plus" class="change-cook-button" onclick="changeCookCount(1);">+</span>
-                    </div>
-                    <br>
-                    <button type="button" id="additem-decide" onclick="decideAddItem();">決定</button>
-                </div>
-            </div>
-        </div>
-        <div id="saleitem-panel">
-            <span id="saleitem-close" onclick="document.getElementById('saleitem-panel').style.display='none';panel_bg.style.display='none';">×</span>
-            <br>
-            &nbsp;売った個数を設定してください
-            <hr>
-            <div style="display:flex">
-                <div id="saleitem-text">
-                    <div id="saleitem-name">TESTまん</div>
-                    <div id="saleitem-image"></div>
-                    <div id="saleitem-price">100円</div>
-                    <br>
-                    <div id="saleitem-description"></div>
-                </div>
-                <div id="saleitem-button">
-                    <div id="saleitem-cooking">蒸し中の個数:100</div>
-                    <div id="saleitem-cooked">蒸しあがった個数:200</div>
-                    <br>
-                    <div id="saleitem-sale-div">
-                        <span id="saleitem-minus" class="change-sale-button" onclick="changeSaleCount(-1);">-</span>
-                        <span id="saleitem-sale">売った個数:300</span>
-                        <span id="saleitem-plus" class="change-sale-button" onclick="changeSaleCount(1);">+</span>
-                    </div>
-                    <br>
-                    <button type="button" id="saleitem-decide" onclick="decideSaleItem();">決定</button>
-                </div>
-            </div>
-        </div>
-        <div id="checkitem-panel">
-            <span id="checkitem-close" onclick="document.getElementById('checkitem-panel').style.display='none';panel_bg.style.display='none';">×</span>
-            <hr>
-            <div style="display:flex">
-                <div id="checkitem-text">
-                    <div id="checkitem-name">TESTまん</div>
-                    <div id="checkitem-image"></div>
-                    <div id="checkitem-price">100円</div>
-                    <br>
-                    <div id="checkitem-description"></div>
-                    <br>
-                    <div id="checkitem-status">調理完了まで:01:23</div>
-                    <button type="button" id="checkitem-destroy" onclick="destroyItem();">廃棄</button>
-                </div>
-            </div>
-        </div>
 
-        <link rel="stylesheet" href="./index.css">
-        <script src="./index.js" type="module"></script>
-    </body>
+<head>
+    <title>肉まん表示マン</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="panel-bg"></div>
+    <header id="header">
+        <div id="title">在电脑上显示肉包子的装置<div id="synchronizing"></div>
+        </div>
+        <div id="date">1970年01月01日 (日) 12:34</div>
+    </header>
+    <br>
+    <div id="tab">
+        <span id="add" class="tab-selector" onclick="changeTab('add');">肉まんを追加する</span>
+        <span id="sale" class="tab-selector" onclick="changeTab('sale');">肉まんを売る</span>
+        <span id="edit" class="tab-selector" onclick="changeTab('edit');">現在の肉まんを確認する</span>
+    </div>
+    <div id="add-panel" class="panel">
+        &nbsp;追加する肉まんを選択してください。
+        <div id="add-items">
+        </div>
+    </div>
+    <div id="sale-panel" class="panel">
+        &nbsp;販売した肉まんを選択してください。
+        <div id="sale-items">
+        </div>
+    </div>
+    <div id="edit-panel" class="panel">
+        <div id="edit-tab">
+            <span id="edit-1" class="edit-tab-selector" onclick="changeEditTab(0);">1段目</span>
+            <span id="edit-2" class="edit-tab-selector" onclick="changeEditTab(1);">2段目</span>
+            <span id="edit-3" class="edit-tab-selector" onclick="changeEditTab(2);">3段目</span>
+            <span id="edit-4" class="edit-tab-selector" onclick="changeEditTab(3);">4段目</span>
+            <span id="edit-5" class="edit-tab-selector" onclick="changeEditTab(4);">5段目</span>
+        </div>
+        <div id="item-selectors">
+        </div>
+    </div>
+    <div id="additem-panel">
+        <div class="popup-title">
+            <p>肉まんの個数を設定してください</p>
+            <svg id="additem-close"
+                onclick="document.getElementById('additem-panel').style.display='none';panel_bg.style.display='none';"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+        <div style="display:flex">
+            <div id="additem-settime">
+                <b>調理開始時間</b>
+                <div class="control-menu-wrapper">
+                    <span id="additem-verylate" class="change-time-button" onclick="changeCookTime(-10);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </span>
+                    <span id="additem-late" class="change-time-button" onclick="changeCookTime(-1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                        </svg>
+                    </span>
+                    <span id="additem-start">12:34</span>
+                    <span id="additem-early" class="change-time-button" onclick="changeCookTime(1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </span>
+                    <span id="additem-veryearly" class="change-time-button" onclick="changeCookTime(10);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </span>
+                </div>
+                <br><br>
+                <b>必要蒸し時間</b>
+                <div id="additem-time">50分</div>
+                <br>
+                <b>調理完了時間</b>
+                <div id="additem-end">13:24</div>
+            </div>
+            <div id="additem-text">
+                <div id="additem-name">TESTまん</div>
+                <div id="additem-image"></div>
+                <div id="additem-price">100円</div>
+                <br>
+                <div id="additem-description"></div>
+            </div>
+            <div id="additem-button">
+                <div id="additem-cooking">蒸し中の個数:100</div>
+                <div id="additem-cooked">蒸しあがった個数:200</div>
+                <br>
+                <div id="additem-cook-div" class="control-menu-wrapper">
+                    <span id="additem-minus" class="change-cook-button" onclick="changeCookCount(-1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                        </svg>
+                    </span>
+                    <span id="additem-cook">追加する個数:300</span>
+                    <span id="additem-plus" class="change-cook-button" onclick="changeCookCount(1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </span>
+                </div>
+                <br>
+                <button type="button" id="additem-decide" onclick="decideAddItem();">決定</button>
+            </div>
+        </div>
+    </div>
+    <div id="saleitem-panel">
+        <div class="popup-title">
+            <p>売った個数を指定してください</p>
+            <svg id="saleitem-close"
+                onclick="document.getElementById('saleitem-panel').style.display='none';panel_bg.style.display='none';"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+        <div style="display:flex">
+            <div id="saleitem-text">
+                <div id="saleitem-name">TESTまん</div>
+                <div id="saleitem-image"></div>
+                <div id="saleitem-price">100円</div>
+                <br>
+                <div id="saleitem-description"></div>
+            </div>
+            <div id="saleitem-button">
+                <div id="saleitem-cooking">蒸し中の個数:100</div>
+                <div id="saleitem-cooked">蒸しあがった個数:200</div>
+                <br>
+                <div id="saleitem-sale-div" class="control-menu-wrapper">
+                    <span id="saleitem-minus" class="change-sale-button" onclick="changeSaleCount(-1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                        </svg>
+                    </span>
+                    <span id="saleitem-sale">追加する個数:300</span>
+                    <span id="saleitem-plus" class="change-sale-button" onclick="changeSaleCount(1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </span>
+                </div>
+                <br>
+                <button type="button" id="saleitem-decide" onclick="decideSaleItem();">決定</button>
+            </div>
+        </div>
+    </div>
+    <div id="checkitem-panel">
+        <div class="popup-title">
+            <svg id="checkitem-close"
+                onclick="document.getElementById('checkitem-panel').style.display='none';panel_bg.style.display='none';"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+        <div style="display:flex">
+            <div id="checkitem-text">
+                <div id="checkitem-name">TESTまん</div>
+                <div id="checkitem-image"></div>
+                <div id="checkitem-price">100円</div>
+                <br>
+                <div id="checkitem-description"></div>
+                <br>
+                <div id="checkitem-status">調理完了まで:01:23</div>
+                <button type="button" id="checkitem-destroy" onclick="destroyItem();">廃棄</button>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="./index.css">
+    <script src="./index.js" type="module"></script>
+</body>
+
 </html>

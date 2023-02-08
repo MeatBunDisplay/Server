@@ -67,6 +67,20 @@ http.createServer((request, response) => {
                 response.end();
             })
             break;
+        case '/visualizer.js':
+            fs.readFile('./visualizer.js', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/javascript' });
+                response.write(data);
+                response.end();
+            })
+            break;
+        case '/visualizer.css':
+            fs.readFile('./visualizer.css', 'UTF-8', (error, data) => {
+                response.writeHead(200, { 'Content-Type': 'text/css' });
+                response.write(data);
+                response.end();
+            })
+            break;
         case '/database.js':
             fs.readFile('./database.js', 'UTF-8', (error, data) => {
                 response.writeHead(200, { 'Content-Type': 'text/javascript' });
@@ -109,7 +123,7 @@ http.createServer((request, response) => {
             });
             break;
         case '/db/get_fastest_mb':
-            connection.query('SELECT MBL.TypeName, COUNT(MBL.TypeName) AS Count, (IF(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))>=0, 0, ABS(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC;', function(error, results, fields) {
+            connection.query('SELECT MBL.TypeName, (BIN_TO_UUID(MBL.TypeID)) AS TypeID, COUNT(MBL.TypeName) AS Count, (IF(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))>=0, 0, ABS(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, Type AS TypeID, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC;', function(error, results, fields) {
                 if (error) {
                     response.writeHead(500, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(error));

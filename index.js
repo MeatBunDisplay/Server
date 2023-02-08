@@ -50,6 +50,7 @@ function set_meatbut_field(object) {
 function get_meatbut_data(object) {
     set_meatbut_field(object);
     synchronizing_element.style.visibility = "hidden";
+    loop();
     setInterval(() => { loop(); }, 1000);
 }
 
@@ -121,7 +122,7 @@ function initialize_item_selector() {
         let selector = window.document.getElementById(`selector-${ss}`);
         for (let rs = 0; rs < row_size; rs++) {
             for (let cs = 0; cs < column_size; cs++) {
-                selector.insertAdjacentHTML("beforeend", `<div class="edit-item column${cs+((ss-1)*column_size)} row${rs}" onclick="clickItem(${rs},${cs+((ss-1)*column_size)});"></div>`);
+                selector.insertAdjacentHTML("beforeend", `<div class="edit-item column${cs + ((ss - 1) * column_size)} row${rs}" onclick="clickItem(${rs},${cs + ((ss - 1) * column_size)});"></div>`);
             }
             if (rs + 1 != row_size) selector.insertAdjacentHTML("beforeend", `<div class="flex-br"></div>`);
         }
@@ -138,7 +139,7 @@ function loop() {
 }
 
 function updateRender() {
-    date_element.innerText = `${nowdate.getFullYear()}年${nowdate.getMonth()+1}月${nowdate.getDate()}日(${WEEK[nowdate.getDay()]}) ${nowdate.getHours().toString().padStart(2, "0")}:${nowdate.getMinutes().toString().padStart(2, "0")}:${nowdate.getSeconds().toString().padStart(2, "0")}`;
+    date_element.innerText = `${nowdate.getFullYear()}年${nowdate.getMonth() + 1}月${nowdate.getDate()}日(${WEEK[nowdate.getDay()]}) ${nowdate.getHours().toString().padStart(2, "0")}:${nowdate.getMinutes().toString().padStart(2, "0")}:${nowdate.getSeconds().toString().padStart(2, "0")}`;
     let add_items = document.getElementById('add-items');
     let sale_items = document.getElementById('sale-items');
     let add_item = document.getElementsByClassName('add-item');
@@ -191,7 +192,7 @@ function updateRender() {
                 item.innerText = `${registered_nikuman[field[column][row].id].name}\n調理済み!`
             } else {
                 let lefttime = toDate(field[column][row].finish_time) - nowdate;
-                item.innerText = `${registered_nikuman[field[column][row].id].name}\n${Math.floor(lefttime/1000/60)}:${(Math.floor(lefttime/1000)%60).toString().padStart(2, "0")}`
+                item.innerText = `${registered_nikuman[field[column][row].id].name}\n${Math.floor(lefttime / 1000 / 60)}:${(Math.floor(lefttime / 1000) % 60).toString().padStart(2, "0")}`
             }
         }
     }
@@ -216,9 +217,12 @@ function clickAddItem(id, date) {
         id: id,
         item_count: 0,
         cook_minutes: toMinutes(date),
-        start_datetime: `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`
+        start_datetime: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`
     };
     let panel = document.getElementById('additem-panel');
+    let render_image = document.getElementById('additem-image');
+    if (registered_nikuman[id].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[id].img})`;
+    else render_image.style.backgroundImage = "";
     let description = document.getElementById('additem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('additem-price');
@@ -238,9 +242,9 @@ function clickAddItem(id, date) {
         }
     }
     let start_time = document.getElementById('additem-start');
-    start_time.innerText = `${Math.floor(adding.cook_minutes/60%24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes%60).toString().padStart(2, "0")}`;
+    start_time.innerText = `${Math.floor(adding.cook_minutes / 60 % 24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes % 60).toString().padStart(2, "0")}`;
     let end_time = document.getElementById('additem-end');
-    end_time.innerText = `${Math.floor((adding.cook_minutes+registered_nikuman[id].time)/60%24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes+registered_nikuman[id].time)%60).toString().padStart(2, "0")}`;
+    end_time.innerText = `${Math.floor((adding.cook_minutes + registered_nikuman[id].time) / 60 % 24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes + registered_nikuman[id].time) % 60).toString().padStart(2, "0")}`;
     let cooking_count = document.getElementById('additem-cooking');
     cooking_count.innerText = `蒸し中の個数:${adding.cooking}`;
     let cooked_count = document.getElementById('additem-cooked');
@@ -273,9 +277,9 @@ window.changeCookCount = (num) => {
 window.changeCookTime = (num) => {
     adding.cook_minutes += num;
     let start_time = document.getElementById('additem-start');
-    start_time.innerText = `${Math.floor(adding.cook_minutes/60%24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes%60).toString().padStart(2, "0")}`;
+    start_time.innerText = `${Math.floor(adding.cook_minutes / 60 % 24).toString().padStart(2, "0")}:${Math.floor(adding.cook_minutes % 60).toString().padStart(2, "0")}`;
     let end_time = document.getElementById('additem-end');
-    end_time.innerText = `${Math.floor((adding.cook_minutes+registered_nikuman[adding.id].time)/60%24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes+registered_nikuman[adding.id].time)%60).toString().padStart(2, "0")}`;
+    end_time.innerText = `${Math.floor((adding.cook_minutes + registered_nikuman[adding.id].time) / 60 % 24).toString().padStart(2, "0")}:${Math.floor((adding.cook_minutes + registered_nikuman[adding.id].time) % 60).toString().padStart(2, "0")}`;
 }
 
 window.decideAddItem = () => {
@@ -318,7 +322,7 @@ window.decideAddItem = () => {
                                             "id": meatbut.uuid,
                                             "number": number_index,
                                             "layer": layer_index
-                                        }, object => {});
+                                        }, object => { });
                                     }
                                 });
                             });
@@ -331,7 +335,7 @@ window.decideAddItem = () => {
                         "number": j,
                         "layer": registered_nikuman[adding.id].place[k],
                         "start_date": adding.start_datetime
-                    }, object => {});
+                    }, object => { });
                 }
             }
         }
@@ -389,6 +393,9 @@ window.clickSaleItem = (id) => {
         item_count: 0
     };
     let panel = document.getElementById('saleitem-panel');
+    let render_image = document.getElementById('saleitem-image');
+    if (registered_nikuman[id].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[id].img})`;
+    else render_image.style.backgroundImage = "";
     let description = document.getElementById('saleitem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('saleitem-price');
@@ -447,7 +454,7 @@ window.decideSaleItem = () => {
                 } else {
                     post_request("/db/delete_meatbut", {
                         id: (field[registered_nikuman[selling.id].place[k]].pop()).uuid
-                    }, object => {});
+                    }, object => { });
                 }
             }
         }
@@ -455,9 +462,11 @@ window.decideSaleItem = () => {
 }
 
 window.changeSaleCount = (num) => {
-    selling.sale = Math.max(0, Math.min(selling.sale + num, selling.cooked));
-    let sale_count = document.getElementById('saleitem-sale');
-    sale_count.innerText = `追加する個数:${selling.sale}`;
+    if (selling.cooked != 0) {
+        selling.sale = Math.max(1, Math.min(selling.sale + num, selling.cooked));
+        let sale_count = document.getElementById('saleitem-sale');
+        sale_count.innerText = `売った個数:${selling.sale}`;
+    }
 }
 
 window.clickItem = (row, column) => {
@@ -465,6 +474,9 @@ window.clickItem = (row, column) => {
     let id = field[column][row].id;
     let name = document.getElementById('checkitem-name');
     name.innerText = `${registered_nikuman[id].name}`;
+    let render_image = document.getElementById('checkitem-image');
+    if (registered_nikuman[id].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[id].img})`;
+    else render_image.style.backgroundImage = "";
     let description = document.getElementById('checkitem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('checkitem-price');
@@ -472,9 +484,9 @@ window.clickItem = (row, column) => {
     let checkitem_status = document.getElementById('checkitem-status');
     let lefttime = toDate(field[column][row].finish_time) - nowdate;
     if (toMinutes(nowdate) >= field[column][row].finish_time) {
-        checkitem_status.innerText = `調理後経過時間:${Math.floor(-lefttime/1000/60)}分${(Math.floor(-lefttime/1000)%60).toString().padStart(2, "0")}秒`;
+        checkitem_status.innerText = `調理後経過時間:${Math.floor(-lefttime / 1000 / 3600)}時間${Math.floor(-lefttime / 1000 / 60) % 60}分${(Math.floor(-lefttime / 1000) % 60).toString().padStart(2, "0")}秒`;
     } else {
-        checkitem_status.innerText = `残り調理時間:${Math.floor(lefttime/1000/60)}分${(Math.floor(lefttime/1000)%60).toString().padStart(2, "0")}秒`;
+        checkitem_status.innerText = `残り調理時間:${Math.floor(lefttime / 1000 / 60)}分${(Math.floor(lefttime / 1000) % 60).toString().padStart(2, "0")}秒`;
     }
     let button = document.getElementById('checkitem-destroy');
     button.onclick = () => { destroyItem(row, column); }
@@ -517,7 +529,7 @@ window.destroyItem = (row, column) => {
                             "id": meatbut.uuid,
                             "number": number_index,
                             "layer": layer_index
-                        }, object => {});
+                        }, object => { });
                     }
                 });
             });
@@ -550,7 +562,7 @@ window.sortField = () => {
                 }
             }
         }
-        arr.sort(function(a, b) {
+        arr.sort(function (a, b) {
             return (a.create_time > b.create_time ? -1 : 1);
         });
         let j = 0;
