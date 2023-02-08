@@ -238,7 +238,7 @@ http.createServer((request, response) => {
                     .on('end', function() {
                         data = JSON.parse(data);
                         if (data["img"] === "NULL") {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -249,7 +249,7 @@ http.createServer((request, response) => {
                                 }
                             });
                         } else {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=${data["id"]};`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
