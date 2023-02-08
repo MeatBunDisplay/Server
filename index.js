@@ -169,6 +169,7 @@ function updateRender() {
         render_item.className = 'sale-item';
         let render_image = document.createElement('div');
         render_image.className = 'sale-item-image';
+        if (registered_nikuman[i].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[i].img})`;
         render_item.appendChild(render_image);
         let render_name = document.createElement('div');
         render_name.className = 'sale-item-name';
