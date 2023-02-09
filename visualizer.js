@@ -44,9 +44,9 @@ function loop() {
                     if (element === null) {
                         state = `<div class="edit-item"><div class="item-name"></div><div class="item-time"></div></div>`;
                     } else if (element["TimeLeft"] === 0) {
-                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}&nbsp;<span class="price">${element["TypePrice"]}円(税込み)</span></div><div class="item-time">${element["Count"]}個調理済み</div></div>`;
+                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">${element["Count"]}個調理済み</div></div>`;
                     } else {
-                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}&nbsp;<span class="price">${element["TypePrice"]}円(税込み)</span></div><div class="item-time">あと${element["TimeLeft"]}分後に<br>${element["Count"]}個調理完了</div></div>`;
+                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">あと${element["TimeLeft"]}分後に${element["Count"]}個調理完了</div></div>`;
                     }
                     meatbuts.insertAdjacentHTML("beforeend", `${state}`);
                 });

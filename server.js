@@ -474,7 +474,7 @@ http.createServer((request, response) => {
                 request.on('data', function(chunk) { data += chunk })
                     .on('end', function() {
                         data = data.split(request.headers['content-type'].split('boundary=')[1]);
-                        let fname = new Date().toLocaleString().replaceAll("/", "-").replace(" ", "T").replaceAll(":", "-") + "." + data[1].substring(data[1].indexOf("data:image/") + "data:image/".length, data[1].indexOf(";base64,"));
+                        let fname = new Date().toLocaleString().replace(/\//g, "-").replace(/ /g, "T").replace(/:/g, "-") + "." + data[1].substring(data[1].indexOf("data:image/") + "data:image/".length, data[1].indexOf(";base64,"));
                         let b64data = data[1].substring(data[1].indexOf("data:image/"), data[1].length);
                         b64data = b64data.substring(b64data.indexOf("base64,") + "base64,".length, b64data.indexOf("\n"));
                         fs.writeFile(`./media/${fname}`, b64data, 'base64', (err) => {

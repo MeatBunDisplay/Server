@@ -1,5 +1,7 @@
 import { get_request, post_request } from "./database.js";
 
+const ip="192.168.249.1"
+
 let nowdate;
 let least_type_data;
 let least_place_data;
@@ -91,7 +93,7 @@ window.add_type = () => {
         if (image_input.files.length > 0 && file_data != "") {
             const formData = new FormData();
             formData.append("image", file_data);
-            fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
+            fetch(`http://${ip}/upload/image`, { method: "POST", body: formData }).then((data) => {
                 data.text().then(text => {
                     post_request("db/add_type", {
                         "name": window.document.getElementById("type_name").value,
@@ -196,7 +198,7 @@ window.esubmit = () => {
             if (efile_update && efile_data != "") {
                 const formData = new FormData();
                 formData.append("image", efile_data);
-                fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
+                fetch(`http://${ip}/upload/image`, { method: "POST", body: formData }).then((data) => {
                     data.text().then(text => {
                         post_request("/db/update_type", {
                             id: selected_id,

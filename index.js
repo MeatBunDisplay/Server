@@ -122,7 +122,7 @@ function initialize_item_selector() {
         let selector = window.document.getElementById(`selector-${ss}`);
         for (let rs = 0; rs < row_size; rs++) {
             for (let cs = 0; cs < column_size; cs++) {
-                selector.insertAdjacentHTML("beforeend", `<div class="edit-item column${cs + ((ss - 1) * column_size)} row${rs}" onclick="clickItem(${rs},${cs + ((ss - 1) * column_size)});"></div>`);
+                selector.insertAdjacentHTML("beforeend", `<div class="edit-item column${cs + ((ss - 1) * column_size)} row${rs}" onclick="clickItem(${rs},${cs + ((ss - 1) * column_size)});"><div class="edit-item-title"></div><div class="edit-item-time"></div></div>`);
             }
             if (rs + 1 != row_size) selector.insertAdjacentHTML("beforeend", `<div class="flex-br"></div>`);
         }
@@ -184,15 +184,19 @@ function updateRender() {
         for (let row = 0; row < 3; row++) {
             let item = document.getElementsByClassName(`column${column} row${row}`)[0];
             if (row >= field[column].length) {
-                item.innerText = ``;
+                item.childNodes[0].innerText = "";
+                item.childNodes[1].innerText = "";
+                //item.innerText = ``;
                 continue;
             }
             if (field[column][row] === undefined) { console.log("ソート後の順番が更新されていない可能性あり。"); continue; }
             if (toMinutes(nowdate) >= field[column][row].finish_time) {
-                item.innerText = `${registered_nikuman[field[column][row].id].name}\n調理済み!`
+                item.childNodes[0].innerText = `${registered_nikuman[field[column][row].id].name}`;
+                item.childNodes[1].innerText = "調理済み!";
             } else {
                 let lefttime = toDate(field[column][row].finish_time) - nowdate;
-                item.innerText = `${registered_nikuman[field[column][row].id].name}\n${Math.floor(lefttime / 1000 / 60)}:${(Math.floor(lefttime / 1000) % 60).toString().padStart(2, "0")}`
+                item.childNodes[0].innerText = `${registered_nikuman[field[column][row].id].name}`;
+                item.childNodes[1].innerText = `${Math.floor(lefttime / 1000 / 60)}:${(Math.floor(lefttime / 1000) % 60).toString().padStart(2, "0")}`;
             }
         }
     }
@@ -299,7 +303,7 @@ window.decideAddItem = () => {
                         "type": registered_nikuman[adding.id].id,
                         "number": j,
                         "layer": registered_nikuman[adding.id].place[k],
-                        "start_date": adding.start_datetime
+                        "start_date": toDate(adding.cook_minutes)//start_datetime
                     }, object => {
                         get_request("/db/get_meatbut", object => {
                             set_meatbut_field(object);
@@ -334,7 +338,7 @@ window.decideAddItem = () => {
                         "type": registered_nikuman[adding.id].id,
                         "number": j,
                         "layer": registered_nikuman[adding.id].place[k],
-                        "start_date": adding.start_datetime
+                        "start_date": toDate(adding.cook_minutes)//start_datetime
                     }, object => { });
                 }
             }
