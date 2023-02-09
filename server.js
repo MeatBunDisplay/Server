@@ -1,19 +1,21 @@
 const HTTP_PORT = 80;
 
+//const iplist = getIpAddr();
+//const ip = iplist[Object.keys(iplist)[0]][0];
+const ip = "192.168.249.1";
+
 const http = require('http');
 const fs = require('fs');
 const mysql = require('mysql');
 const { networkInterfaces } = require('os');
 const connection = mysql.createConnection({
-    host: 'localhost',
+    host: ip,
     user: 'root',
     port: '3306',
     password: 'mokemoke',
     database: 'MeatButDB'
 });
 
-const iplist = getIpAddr();
-const ip = iplist[Object.keys(iplist)[0]][0];
 
 let data = '';
 

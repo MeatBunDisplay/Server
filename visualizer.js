@@ -59,6 +59,6 @@ function loop() {
 
 }
 loop();
-//setInterval(() => {
-//    loop();
-//}, 1000);
+setInterval(() => {
+    loop();
+}, 1000);
