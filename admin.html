@@ -15,9 +15,10 @@
     肉まんの種類を追加する
     <div>
     	<input id="type_name" placeholder="名前"><br>
-    	<input id="type_price" type="number" placeholder="価格" style="width: 5em;">円<br>
+    	<input id="type_price" type="number" placeholder="価格" style="width: 5em;">円(税込み)<br>
     	<input id="type_time" type="number" placeholder="時間" style="width: 5em;">分<br>
     	<input id="type_description" placeholder="説明" columns="30" rows="10"><br>
+    	<input id="type_priority" type="number" placeholder="優先度" style="width: 5em;">数字が大きいほど優先度が高く前に来る<br>
     	<input id="type_image_clear" type="button" onClick="clear_finput();" value="クリア">
     	<input id="type_image" name="image-file" type="file" onChange="file_selected();" accept=".png,.jpg,.jpeg"><br>
     	<div id="preview-image"></div>
@@ -35,9 +36,10 @@
         </select>
         <div id="type_list">
         	<input id="tname_input" placeholder="名前"><br>
-	    	<input id="tprice_input" type="number" placeholder="価格" style="width: 5em;">円<br>
+	    	<input id="tprice_input" type="number" placeholder="価格" style="width: 5em;">円(税込み)<br>
 	    	<input id="ttime_input" type="number" placeholder="時間" style="width: 5em;">分<br>
 	    	<input id="tdesc_input" placeholder="説明" columns="30" rows="10"><br>
+	    	<input id="tpriority_input" type="number" placeholder="優先度" style="width: 5em;"><br>
 	    	<input id="timage_clear" type="button" onClick="eclear_finput();" value="クリア">
 	    	<input id="timage_input" name="image-file" type="file" onChange="efile_selected();" accept=".png,.jpg,.jpeg"><br>
 	    	<div id="epreview-image"></div>

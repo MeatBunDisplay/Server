@@ -2,17 +2,18 @@ import { get_request, post_request } from "./database.js";
 
 let least_data;
 const meatbuts = window.document.getElementById("meatbuts");
-let row_offset = 0;
-let row_margin = 150;
+let row_offset = 50;
+let row_margin = 300;
 
 document.addEventListener('keydown', keyEvent);
-function keyEvent(e){
-    switch(e.key){
+
+function keyEvent(e) {
+    switch (e.key) {
         case "ArrowUp":
-            row_offset+=5;
+            row_offset += 5;
             break;
         case "ArrowDown":
-            row_offset-=5;
+            row_offset -= 5;
             break;
         case "ArrowRight":
             row_margin++;
@@ -42,11 +43,10 @@ function loop() {
                     let state;
                     if (element === null) {
                         state = `<div class="edit-item"><div class="item-name"></div><div class="item-time"></div></div>`;
-                    }
-                    else if (element["TimeLeft"] === 0) {
-                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="item-time">${element["Count"]}個調理済み</div></div>`;
+                    } else if (element["TimeLeft"] === 0) {
+                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}&nbsp;<span class="price">${element["TypePrice"]}円(税込み)</span></div><div class="item-time">${element["Count"]}個調理済み</div></div>`;
                     } else {
-                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="item-time">あと${element["TimeLeft"]}分後に<br>${element["Count"]}個調理完了</div></div>`;
+                        state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}&nbsp;<span class="price">${element["TypePrice"]}円(税込み)</span></div><div class="item-time">あと${element["TimeLeft"]}分後に<br>${element["Count"]}個調理完了</div></div>`;
                     }
                     meatbuts.insertAdjacentHTML("beforeend", `${state}`);
                 });

@@ -84,6 +84,10 @@ window.add_type = () => {
         window.document.getElementById("type_description").value != "") {
         add_type_button.disabled = true;
         window.document.getElementById("caution").innerText = "";
+        let priority = "NULL";
+        if (window.document.getElementById("type_priority").value != "") {
+            priority = window.document.getElementById("type_priority").value;
+        }
         if (image_input.files.length > 0 && file_data != "") {
             const formData = new FormData();
             formData.append("image", file_data);
@@ -94,7 +98,8 @@ window.add_type = () => {
                         "price": window.document.getElementById("type_price").value,
                         "time": window.document.getElementById("type_time").value + "00",
                         "description": window.document.getElementById("type_description").value,
-                        "img": text
+                        "img": text,
+                        "priority": priority
                     }, object => {
                         add_type_button.disabled = false;
                         test_console_log(object);
@@ -107,7 +112,8 @@ window.add_type = () => {
                 "price": window.document.getElementById("type_price").value,
                 "time": window.document.getElementById("type_time").value + "00",
                 "description": window.document.getElementById("type_description").value,
-                "img": "NULL"
+                "img": "NULL",
+                "priority": priority
             }, object => {
                 add_type_button.disabled = false;
                 test_console_log(object);
@@ -164,6 +170,10 @@ window.esubmit = () => {
         window.document.getElementById("tprice_input").value != "" &&
         window.document.getElementById("ttime_input").value != "" &&
         window.document.getElementById("tdesc_input").value != "") {
+        let priority = "NULL";
+        if (window.document.getElementById("tpriority_input").value != "") {
+            priority = window.document.getElementById("tpriority_input").value;
+        }
         esubmit_button.disabled = true;
         selected_id = item_selector.value;
         const ltd = JSON.parse(least_type_data);
@@ -175,7 +185,8 @@ window.esubmit = () => {
                 price: window.document.getElementById("tprice_input").value,
                 time: window.document.getElementById("ttime_input").value + "00",
                 description: window.document.getElementById("tdesc_input").value,
-                img: "NULL"
+                img: "NULL",
+                priority: priority
             }, object => {
                 efile_update = false;
                 esubmit_button.disabled = false;
@@ -193,7 +204,8 @@ window.esubmit = () => {
                             price: window.document.getElementById("tprice_input").value,
                             time: window.document.getElementById("ttime_input").value + "00",
                             description: window.document.getElementById("tdesc_input").value,
-                            "img": text
+                            img: text,
+                            priority: priority
                         }, object => {
                             efile_update = false;
                             esubmit_button.disabled = false;
@@ -208,7 +220,8 @@ window.esubmit = () => {
                     price: window.document.getElementById("tprice_input").value,
                     time: window.document.getElementById("ttime_input").value + "00",
                     description: window.document.getElementById("tdesc_input").value,
-                    img: type_data["ImageSrc"]
+                    img: type_data["ImageSrc"],
+                    priority: priority
                 }, object => {
                     efile_update = false;
                     esubmit_button.disabled = false;
@@ -232,6 +245,9 @@ function changeItem() {
         window.document.getElementById("tprice_input").value = type_data["Price"];
         window.document.getElementById("ttime_input").value = (Number(type_time[0]) * 60) + Number(type_time[1]);
         window.document.getElementById("tdesc_input").value = type_data["Description"];
+        let priority = "";
+        if (type_data["Priority"] != null) priority = type_data["Priority"];
+        window.document.getElementById("tpriority_input").value = priority;
         if (type_data["ImageSrc"] != null) {
             const img = document.createElement("img");
             img.src = `./media/${type_data["ImageSrc"]}`;
