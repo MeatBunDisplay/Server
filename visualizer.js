@@ -2,6 +2,29 @@ import { get_request, post_request } from "./database.js";
 
 let least_data;
 const meatbuts = window.document.getElementById("meatbuts");
+let row_offset = 0;
+let row_margin = 150;
+
+document.addEventListener('keydown', keyEvent);
+function keyEvent(e){
+    switch(e.key){
+        case "ArrowUp":
+            row_offset+=5;
+            break;
+        case "ArrowDown":
+            row_offset-=5;
+            break;
+        case "ArrowRight":
+            row_margin++;
+            break;
+        case "ArrowLeft":
+            row_margin--;
+            break;
+    }
+    meatbuts.style.marginTop = `${row_offset}px`;
+    meatbuts.style.gridTemplateRows = `repeat(5, ${row_margin}px)`;
+}
+
 function loop() {
     get_request("/db/get_place", place_data => {
         get_request("/db/get_fastest_mb", (objects) => {
@@ -36,6 +59,6 @@ function loop() {
 
 }
 loop();
-setInterval(() => {
-    loop();
-}, 1000);
+//setInterval(() => {
+//    loop();
+//}, 1000);

@@ -1,6 +1,6 @@
 @font-face{
     font-family: 'M PLUS Rounded 1c';
-    src: local('./fonts/MPLUSRounded1c.ttf');
+    src: url('/fonts/MPLUSRounded1c.ttf');
 }
 
 html {
@@ -10,16 +10,16 @@ html {
 
 .item-name{
     font-weight: bold;
-    font-size: 20;
+    font-size: 24px;
 }
 
 .item-time{
     font-weight: normal;
-    font-size: 12;
+    font-size: 16px;
 }
 
 #meatbuts{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 100px);
+    grid-template-rows: repeat(5, 150px);
 }
