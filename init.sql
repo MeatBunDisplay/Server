@@ -10,6 +10,7 @@ CREATE TABLE MeatButType(
 	Time TIME NOT NULL,
 	Description VARCHAR(256),
 	ImageSrc VARCHAR(256),
+    Priority INTEGER,
 	CreateTime DATETIME NOT NULL,
 	UpdateTime DATETIME NOT NULL
 );

@@ -104,7 +104,7 @@ http.createServer((request, response) => {
             });
             break;
         case '/db/get_type':
-            connection.query('SELECT BIN_TO_UUID(ID) AS ID, Name, Price, Time, Description, ImageSrc, CreateTime, UpdateTime FROM MeatButType;', function(error, results, fields) {
+            connection.query('SELECT BIN_TO_UUID(ID) AS ID, Name, Price, Time, Description, ImageSrc, Priority, CreateTime, UpdateTime FROM MeatButType ORDER BY Priority DESC;', function(error, results, fields) {
                 if (error) {
                     response.writeHead(500, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(error));
@@ -126,7 +126,7 @@ http.createServer((request, response) => {
             });
             break;
         case '/db/get_fastest_mb':
-            connection.query('SELECT MBL.TypeName, (BIN_TO_UUID(MBL.TypeID)) AS TypeID, COUNT(MBL.TypeName) AS Count, (IF(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))>=0, 0, ABS(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, Type AS TypeID, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC;', function(error, results, fields) {
+            connection.query('SELECT MBL.TypeName, (BIN_TO_UUID(MBL.TypeID)) AS TypeID, MBL.TypePrice, COUNT(MBL.TypeName) AS Count, (IF(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))>=0, 0, ABS(TIMESTAMPDIFF(MINUTE, MBL.EndTime, CAST(NOW() AS DATETIME))))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, Type AS TypeID, (SELECT Price FROM MeatButType AS MBT WHERE ID = Type) AS TypePrice, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC;', function(error, results, fields) {
                 if (error) {
                     response.writeHead(500, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(error));
@@ -181,7 +181,7 @@ http.createServer((request, response) => {
                     .on('end', function() {
                         data = JSON.parse(data);
                         if (data["img"] === "NULL") {
-                            connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", NULL, CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
+                            connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", NULL, ${data["priority"]}, CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -192,7 +192,7 @@ http.createServer((request, response) => {
                                 }
                             });
                         } else {
-                            connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", "${data["img"]}", CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
+                            connection.query(`INSERT MeatButType VALUES(UUID_TO_BIN(UUID()), "${data["name"]}", ${data["price"]}, CAST("${data["time"]}" AS TIME), "${data["description"]}", "${data["img"]}", ${data["priority"]}, CAST(NOW() AS DATETIME), CAST(NOW() AS DATETIME));`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -255,7 +255,7 @@ http.createServer((request, response) => {
                     .on('end', function() {
                         data = JSON.parse(data);
                         if (data["img"] === "NULL") {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc=NULL, Priority=${data["priority"]}, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -266,7 +266,7 @@ http.createServer((request, response) => {
                                 }
                             });
                         } else {
-                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
+                            connection.query(`UPDATE MeatButType SET Name='${data["name"]}', Price=${data["price"]}, Time=CAST("${data["time"]}" AS TIME),  Description="${data["description"]}", ImageSrc="${data["img"]}", Priority=${data["priority"]}, UpdateTime=CAST(NOW() AS DATETIME) WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                                 if (error) {
                                     response.writeHead(500, { 'Content-Type': 'application/json' });
                                     response.end(JSON.stringify(error));
@@ -376,7 +376,7 @@ http.createServer((request, response) => {
                 request.on('data', function(chunk) { data += chunk })
                     .on('end', function() {
                         data = JSON.parse(data);
-                        connection.query(`DELETE FROM MeatbutType WHERE ID=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
+                        connection.query(`DELETE FROM MeatButType WHERE ID=UUID_TO_BIN('${data["type"]}');`, function(error, results, fields) {
                             if (error) {
                                 response.writeHead(500, { 'Content-Type': 'application/json' });
                                 response.end(JSON.stringify(error));
@@ -400,7 +400,7 @@ http.createServer((request, response) => {
                 request.on('data', function(chunk) { data += chunk })
                     .on('end', function() {
                         data = JSON.parse(data);
-                        connection.query(`DELETE FROM Meatbut WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
+                        connection.query(`DELETE FROM MeatBut WHERE ID=UUID_TO_BIN('${data["id"]}');`, function(error, results, fields) {
                             if (error) {
                                 response.writeHead(500, { 'Content-Type': 'application/json' });
                                 response.end(JSON.stringify(error));

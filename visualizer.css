@@ -1,4 +1,4 @@
-@font-face{
+@font-face {
     font-family: 'M PLUS Rounded 1c';
     src: url('/fonts/MPLUSRounded1c.ttf');
 }
@@ -8,18 +8,24 @@ html {
     font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
-.item-name{
+.item-name {
     font-weight: bold;
     font-size: 24px;
 }
 
-.item-time{
+.item-time {
     font-weight: normal;
     font-size: 16px;
 }
 
-#meatbuts{
+.price {
+    font-weight: normal;
+    font-size: 16px;
+}
+
+#meatbuts {
     display: grid;
+    margin-top: 50px;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 150px);
+    grid-template-rows: repeat(5, 300px);
 }
