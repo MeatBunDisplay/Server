@@ -13,6 +13,8 @@ const toast = window.document.getElementById("toast");
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
 let selected_id = "";
 
+const add_type_button = document.getElementById('add_type_button');
+const esubmit_button = document.getElementById('esubmit');
 const image_input = document.getElementById('type_image');
 const preview_image = document.getElementById('preview-image');
 const eimage_input = document.getElementById('timage_input');
@@ -58,11 +60,13 @@ window.file_selected = () => {
 window.eclear_finput = () => {
     eimage_input.value = "";
     efile_data = "";
+    efile_update = true;
     epreview_image.innerHTML = "";
 }
 
 window.efile_selected = () => {
     ereader.readAsDataURL(eimage_input.files[0]);
+    efile_update = true;
 }
 
 function test_console_log(object) {
@@ -74,11 +78,11 @@ function test_console_log(object) {
 }
 
 window.add_type = () => {
-    if (
-        window.document.getElementById("type_name").value != "" &&
+    if (window.document.getElementById("type_name").value != "" &&
         window.document.getElementById("type_price").value != "" &&
         window.document.getElementById("type_time").value != "" &&
         window.document.getElementById("type_description").value != "") {
+        add_type_button.disabled = true;
         window.document.getElementById("caution").innerText = "";
         if (image_input.files.length > 0 && file_data != "") {
             const formData = new FormData();
@@ -91,7 +95,10 @@ window.add_type = () => {
                         "time": window.document.getElementById("type_time").value + "00",
                         "description": window.document.getElementById("type_description").value,
                         "img": text
-                    }, test_console_log);
+                    }, object => {
+                        add_type_button.disabled = false;
+                        test_console_log(object);
+                    });
                 });
             });
         } else {
@@ -101,7 +108,10 @@ window.add_type = () => {
                 "time": window.document.getElementById("type_time").value + "00",
                 "description": window.document.getElementById("type_description").value,
                 "img": "NULL"
-            }, test_console_log);
+            }, object => {
+                add_type_button.disabled = false;
+                test_console_log(object);
+            });
         }
         loop();
     } else {
@@ -150,48 +160,64 @@ window.delete_selectedType = () => {
 }
 
 window.esubmit = () => {
-    selected_id = item_selector.value;
-    const ltd = JSON.parse(least_type_data);
-    const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
-    if ((efile_update && efile_data == "") || (!efile_update && ltd["ImageSrc"] == null)) {
-        post_request("/db/update_type", {
-            id: selected_id,
-            name: window.document.getElementById("tname_input").value,
-            price: window.document.getElementById("tprice_input").value,
-            time: window.document.getElementById("ttime_input").value + "00",
-            description: window.document.getElementById("tdesc_input").value,
-            img: "NULL"
-        }, object => {
-            efile_update = false;
-            test_console_log(object);
-        });
-    } else {
-        /*if (efile_update) {
-            const formData = new FormData();
-            formData.append("image", efile_data);
-            fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
-                data.text().then(text => {
-                    post_request("db/add_type", {
-                        "name": window.document.getElementById("type_name").value,
-                        "price": window.document.getElementById("type_price").value,
-                        "time": window.document.getElementById("type_time").value + "00",
-                        "description": window.document.getElementById("type_description").value,
-                        "img": text
-                    }, test_console_log);
-                });
+    if (window.document.getElementById("tname_input").value != "" &&
+        window.document.getElementById("tprice_input").value != "" &&
+        window.document.getElementById("ttime_input").value != "" &&
+        window.document.getElementById("tdesc_input").value != "") {
+        esubmit_button.disabled = true;
+        selected_id = item_selector.value;
+        const ltd = JSON.parse(least_type_data);
+        const type_data = ltd[(ltd.map(element => element["ID"])).indexOf(selected_id)];
+        if ((efile_update && efile_data == "") || (!efile_update && type_data["ImageSrc"] == null)) {
+            post_request("/db/update_type", {
+                id: selected_id,
+                name: window.document.getElementById("tname_input").value,
+                price: window.document.getElementById("tprice_input").value,
+                time: window.document.getElementById("ttime_input").value + "00",
+                description: window.document.getElementById("tdesc_input").value,
+                img: "NULL"
+            }, object => {
+                efile_update = false;
+                esubmit_button.disabled = false;
+                test_console_log(object);
             });
-        }*/
-        post_request("/db/update_type", {
-            id: selected_id,
-            name: window.document.getElementById("tname_input").value,
-            price: window.document.getElementById("tprice_input").value,
-            time: window.document.getElementById("ttime_input").value + "00",
-            description: window.document.getElementById("tdesc_input").value,
-            img: type_data["ImageSrc"]
-        }, object => {
-            efile_update = false;
-            test_console_log(object);
-        });
+        } else {
+            if (efile_update && efile_data != "") {
+                const formData = new FormData();
+                formData.append("image", efile_data);
+                fetch("http://localhost/upload/image", { method: "POST", body: formData }).then((data) => {
+                    data.text().then(text => {
+                        post_request("/db/update_type", {
+                            id: selected_id,
+                            name: window.document.getElementById("tname_input").value,
+                            price: window.document.getElementById("tprice_input").value,
+                            time: window.document.getElementById("ttime_input").value + "00",
+                            description: window.document.getElementById("tdesc_input").value,
+                            "img": text
+                        }, object => {
+                            efile_update = false;
+                            esubmit_button.disabled = false;
+                            test_console_log(object);
+                        });
+                    });
+                });
+            } else if (!efile_update && type_data["ImageSrc"] != null) {
+                post_request("/db/update_type", {
+                    id: selected_id,
+                    name: window.document.getElementById("tname_input").value,
+                    price: window.document.getElementById("tprice_input").value,
+                    time: window.document.getElementById("ttime_input").value + "00",
+                    description: window.document.getElementById("tdesc_input").value,
+                    img: type_data["ImageSrc"]
+                }, object => {
+                    efile_update = false;
+                    esubmit_button.disabled = false;
+                    test_console_log(object);
+                });
+            }
+        }
+    } else {
+        warning("空白の箇所があります!");
     }
 }
 
@@ -220,7 +246,7 @@ function changeItem() {
     } else {
         delete_type_button.setAttribute("disabled", true);
     }
-    
+
     const edit_item = document.getElementsByClassName("edit-item");
     for (let i = 0; i < edit_item.length; i++) {
         if (edit_item[i].classList.contains(selected_id)) {
