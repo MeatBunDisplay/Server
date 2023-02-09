@@ -298,12 +298,13 @@ window.decideAddItem = () => {
         for (let k = 0; k < registered_nikuman[adding.id].place.length; k++) {
             if (field[registered_nikuman[adding.id].place[k]].length <= j) {
                 left--;
+                let d = toDate(adding.cook_minutes);
                 if (left <= 0) {
                     post_request("/db/add_meatbut", {
                         "type": registered_nikuman[adding.id].id,
                         "number": j,
                         "layer": registered_nikuman[adding.id].place[k],
-                        "start_date": toDate(adding.cook_minutes)//start_datetime
+                        "start_time": `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}-${d.getDate().toString().padStart(2, "0")} ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
                     }, object => {
                         get_request("/db/get_meatbut", object => {
                             set_meatbut_field(object);
@@ -338,7 +339,7 @@ window.decideAddItem = () => {
                         "type": registered_nikuman[adding.id].id,
                         "number": j,
                         "layer": registered_nikuman[adding.id].place[k],
-                        "start_date": toDate(adding.cook_minutes)//start_datetime
+                        "start_time": `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}-${d.getDate().toString().padStart(2, "0")} ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
                     }, object => { });
                 }
             }
@@ -444,6 +445,7 @@ window.decideSaleItem = () => {
     let finish = adding.cook_minutes;
     finish += registered_nikuman[adding.id].time;
     let left = selling.sale;
+    synchronizing_element.style.visibility = "visible";
     for (let j = 2; j >= 0; j--) {
         for (let k = registered_nikuman[selling.id].place.length - 1; k >= 0; k--) {
             if (field[registered_nikuman[selling.id].place[k]].length > j) {
@@ -452,13 +454,16 @@ window.decideSaleItem = () => {
                     post_request("/db/delete_meatbut", {
                         id: (field[registered_nikuman[selling.id].place[k]].pop()).uuid
                     }, object => {
+                        synchronizing_element.style.visibility = "hidden";
                         updateRender();
                     });
                     return;
                 } else {
                     post_request("/db/delete_meatbut", {
                         id: (field[registered_nikuman[selling.id].place[k]].pop()).uuid
-                    }, object => { });
+                    }, object => {
+                        synchronizing_element.style.visibility = "hidden";
+                    });
                 }
             }
         }
@@ -537,6 +542,7 @@ window.destroyItem = (row, column) => {
                     }
                 });
             });
+            synchronizing_element.style.visibility = "hidden";
             let panel = document.getElementById('checkitem-panel');
             panel.style.display = "none";
         });
