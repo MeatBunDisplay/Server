@@ -16,6 +16,8 @@ html {
 .item-time {
     font-weight: normal;
     font-size: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .price {

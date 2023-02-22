@@ -29,7 +29,7 @@ function keyEvent(e) {
 function loop() {
     get_request("/db/get_place", place_data => {
         get_request("/db/get_fastest_mb", (objects) => {
-            if (objects.length){
+            if (objects.length) {
                 if (JSON.stringify(objects) != least_data) {
                     place_data.sort((a, b) => { return a["PlaceID"] - b["PlaceID"] });
                     meatbuts.innerHTML = "";
@@ -44,17 +44,31 @@ function loop() {
                         let state;
                         if (element === null) {
                             state = `<div class="edit-item"><div class="item-name"></div><div class="item-time"></div></div>`;
-                        } else if (element["Cooked"] === 1) {
-                            state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">${element["Count"]}個調理済み</div></div>`;
                         } else {
-                            state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">あと${Math.ceil(Number(element["TimeLeft"].replaceAll(":",""))/100)}分後に${element["Count"]}個調理完了</div></div>`;
+                            let count_block = ``;
+                            for (let i = 0; i < element["Cooked"]; i++) {
+                                count_block += `<img src="media/icon/mb_icon.svg" height="30px" width="30px">`;
+                            }
+                            let cooking = ``;
+                            if (element["Cooking"] === null) cooking = `0個：　調理中　`;
+                            else {
+                                cooking += `調理中　：`
+                                for (let i = 0; i < element["Cooking"]; i++) {
+                                    cooking += `<img src="media/icon/mb_icon.svg" height="30px" width="30px">`;
+                                }
+                            }
+
+                            if (element["IsCooked"] === 1) {
+                                state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">調理済み：${count_block}</div><div class="item-time">${cooking}</div></div>`;
+                            } else {
+                                state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">あと${Math.ceil(Number(element["TimeLeft"].replaceAll(":",""))/100)}分後に${element["Cooked"]}個調理完了</div></div>`;
+                            }
                         }
                         meatbuts.insertAdjacentHTML("beforeend", `${state}`);
                     });
                     least_data = JSON.stringify(objects);
                 }
-            }
-            else {
+            } else {
                 meatbuts.innerHTML = "";
                 least_data = "";
             }

@@ -126,7 +126,7 @@ http.createServer((request, response) => {
             });
             break;
         case '/db/get_fastest_mb':
-            connection.query('SELECT MBL.TypeName, (BIN_TO_UUID(MBL.TypeID)) AS TypeID, MBL.TypePrice, COUNT(MBL.TypeName) AS Count, (IF(TIMEDIFF(CAST(NOW() AS DATETIME), MBL.EndTime)>=0, 0, TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME)))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, Type AS TypeID, (SELECT Price FROM MeatButType AS MBT WHERE ID = Type) AS TypePrice, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC;', function(error, results, fields) {
+            connection.query('SELECT CT.TypeName, CT.TypeID, CT.TypePrice, CT.Cooked AS IsCooked, CT.TimeLeft, CT.Count AS Cooked, CT.Cooking FROM ((SELECT MBL_B.TypeName, MBL_B.TypeID, MBL_B.TypePrice, MBL_B.Count, MBL_B.TimeLeft, MBL_B.Cooked, MBL_A.Cooking FROM (SELECT MBL.TypeName, (BIN_TO_UUID(MBL.TypeID)) AS TypeID, MBL.TypePrice, COUNT(MBL.TypeName) AS Count, (IF(TIMEDIFF(CAST(NOW() AS DATETIME), MBL.EndTime)>=0, 0, TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME)))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, Type AS TypeID, (SELECT Price FROM MeatButType AS MBT WHERE ID = Type) AS TypePrice, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC) AS MBL_B LEFT OUTER JOIN (SELECT (BIN_TO_UUID(MBL.TypeID)) AS TypeID, COUNT(MBL.TypeID) AS Cooking, 1 AS Cooked FROM (SELECT Type AS TypeID FROM MeatBut AS MBT WHERE TIMEDIFF(CAST(NOW() AS DATETIME), EndTime)<=0) AS MBL GROUP BY TypeID) AS MBL_A ON (MBL_B.TypeID=MBL_A.TypeID)) UNION (SELECT MBL_B.TypeName, MBL_B.TypeID, MBL_B.TypePrice, MBL_B.Count, MBL_B.TimeLeft, MBL_B.Cooked, MBL_A.Cooking FROM (SELECT MBL.TypeName, (BIN_TO_UUID(MBL.TypeID)) AS TypeID, MBL.TypePrice, COUNT(MBL.TypeName) AS Count, (IF(TIMEDIFF(CAST(NOW() AS DATETIME), MBL.EndTime)>=0, 0, TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME)))) AS TimeLeft, (IF(TIMEDIFF(MBL.EndTime, CAST(NOW() AS DATETIME))<0, TRUE, FALSE)) AS Cooked FROM (SELECT (SELECT Name FROM MeatButType AS MBT WHERE ID = Type) AS TypeName, Type AS TypeID, (SELECT Price FROM MeatButType AS MBT WHERE ID = Type) AS TypePrice, EndTime FROM MeatBut AS MB WHERE (TIMEDIFF(EndTime, CAST(NOW() AS DATETIME))<0) OR (EndTime = (SELECT MIN(EndTime) FROM MeatBut WHERE Type = MB.Type))) AS MBL GROUP BY TypeName ORDER BY Cooked DESC) AS MBL_B RIGHT OUTER JOIN (SELECT (BIN_TO_UUID(MBL.TypeID)) AS TypeID, COUNT(MBL.TypeID) AS Cooking, 1 AS Cooked FROM (SELECT Type AS TypeID FROM MeatBut AS MBT WHERE TIMEDIFF(CAST(NOW() AS DATETIME), EndTime)<=0) AS MBL GROUP BY TypeID) AS MBL_A ON (MBL_B.TypeID=MBL_A.TypeID))) AS CT;', function(error, results, fields) {
                 if (error) {
                     response.writeHead(500, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(error));
@@ -440,7 +440,7 @@ http.createServer((request, response) => {
             }
             break;
         case request.url.split('?')[0].startsWith("/media/") &&
-        (request.url.split('?')[0].endsWith(".png") || request.url.split('?')[0].endsWith(".jpg") || request.url.split('?')[0].endsWith(".jpeg")) &&
+        (request.url.split('?')[0].endsWith(".png") || request.url.split('?')[0].endsWith(".jpg") || request.url.split('?')[0].endsWith(".jpeg") || request.url.split('?')[0].endsWith(".svg")) &&
         request.url.split('?')[0]:
             console.log(`${new Date().toLocaleString()} : "${request.url.split('?')[0]}" WAS ACCESSED WITH ${request.method}`);
             if (request.method === "GET") {
@@ -454,6 +454,12 @@ http.createServer((request, response) => {
                     } else if (request.url.split('?')[0].endsWith(".jpg") || request.url.split('?')[0].endsWith(".jpeg")) {
                         fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
                             response.writeHead(200, { 'Content-Type': 'image/jpg' });
+                            response.write(data);
+                            response.end();
+                        })
+                    } else if (request.url.split('?')[0].endsWith(".svg")) {
+                        fs.readFile(`.${request.url.split('?')[0]}`, (error, data) => {
+                            response.writeHead(200, { 'Content-Type': 'image/svg+xml' });
                             response.write(data);
                             response.end();
                         })
