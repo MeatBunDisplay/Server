@@ -155,6 +155,7 @@ function updateRender() {
         let render_image = document.createElement('div');
         render_image.className = 'add-item-image';
         if (registered_nikuman[i].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[i].img})`;
+        else render_image.style.backgroundImage = `url("media/icon/mb_icon.svg")`;
         render_item.appendChild(render_image);
         let render_name = document.createElement('div');
         render_name.className = 'add-item-name';
@@ -171,6 +172,7 @@ function updateRender() {
         let render_image = document.createElement('div');
         render_image.className = 'sale-item-image';
         if (registered_nikuman[i].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[i].img})`;
+        else render_image.style.backgroundImage = `url("media/icon/mb_icon.svg")`;
         render_item.appendChild(render_image);
         let render_name = document.createElement('div');
         render_name.className = 'sale-item-name';
@@ -226,7 +228,7 @@ function clickAddItem(id, date) {
     let panel = document.getElementById('additem-panel');
     let render_image = document.getElementById('additem-image');
     if (registered_nikuman[id].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[id].img})`;
-    else render_image.style.backgroundImage = "";
+    else render_image.style.backgroundImage = `url("media/icon/mb_icon.svg")`;
     let description = document.getElementById('additem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('additem-price');
@@ -327,7 +329,7 @@ window.decideAddItem = () => {
                                             "id": meatbut.uuid,
                                             "number": number_index,
                                             "layer": layer_index
-                                        }, object => { });
+                                        }, object => {});
                                     }
                                 });
                             });
@@ -340,7 +342,7 @@ window.decideAddItem = () => {
                         "number": j,
                         "layer": registered_nikuman[adding.id].place[k],
                         "start_time": `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}-${d.getDate().toString().padStart(2, "0")} ${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`
-                    }, object => { });
+                    }, object => {});
                 }
             }
         }
@@ -400,7 +402,7 @@ window.clickSaleItem = (id) => {
     let panel = document.getElementById('saleitem-panel');
     let render_image = document.getElementById('saleitem-image');
     if (registered_nikuman[id].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[id].img})`;
-    else render_image.style.backgroundImage = "";
+    else render_image.style.backgroundImage = `url("media/icon/mb_icon.svg")`;
     let description = document.getElementById('saleitem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('saleitem-price');
@@ -485,7 +487,7 @@ window.clickItem = (row, column) => {
     name.innerText = `${registered_nikuman[id].name}`;
     let render_image = document.getElementById('checkitem-image');
     if (registered_nikuman[id].img != "") render_image.style.backgroundImage = `url(${registered_nikuman[id].img})`;
-    else render_image.style.backgroundImage = "";
+    else render_image.style.backgroundImage = `url("media/icon/mb_icon.svg")`;
     let description = document.getElementById('checkitem-description');
     description.innerText = `${registered_nikuman[id].description}`;
     let price = document.getElementById('checkitem-price');
@@ -538,7 +540,7 @@ window.destroyItem = (row, column) => {
                             "id": meatbut.uuid,
                             "number": number_index,
                             "layer": layer_index
-                        }, object => { });
+                        }, object => {});
                     }
                 });
             });
@@ -572,7 +574,7 @@ window.sortField = () => {
                 }
             }
         }
-        arr.sort(function (a, b) {
+        arr.sort(function(a, b) {
             return (a.create_time > b.create_time ? -1 : 1);
         });
         let j = 0;
