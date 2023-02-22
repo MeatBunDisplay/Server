@@ -57,11 +57,13 @@ function loop() {
                                     cooking += `<img src="media/icon/mb_icon.svg" height="30px" width="30px">`;
                                 }
                             }
+                            let time_left = ``;
+                            if (element["FC"] > 0) time_left = `あと${Math.ceil(Number(element["TimeLeft"].replaceAll(":",""))/100)}分後に${element["FC"]}個調理完了`;
 
                             if (element["IsCooked"] === 1) {
-                                state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">調理済み：${count_block}</div><div class="item-time">${cooking}</div></div>`;
+                                state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">調理済み：${count_block}</div><div class="item-time">${cooking}</div><div class="item-time">${time_left}</div></div>`;
                             } else {
-                                state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">調理済み：</div><div class="item-time">${cooking}</div><div class="item-time">あと${Math.ceil(Number(element["TimeLeft"].replaceAll(":",""))/100)}分後に${element["Cooked"]}個調理完了</div></div>`;
+                                state = `<div class="edit-item"><div class="item-name">${element["TypeName"]}</div><div class="price">${element["TypePrice"]}円(税込み)</div><div class="item-time">調理済み：</div><div class="item-time">${cooking}</div><div class="item-time">${time_left}</div></div>`;
                             }
                         }
                         meatbuts.insertAdjacentHTML("beforeend", `${state}`);
