@@ -1,6 +1,11 @@
 # Server
 サーバーです
 
+## ライセンス
+本ソフトウェアでは表示フォントに「M PLUS Rounded 1c」(https://fonts.google.com/specimen/M+PLUS+Rounded+1c) を使用しています。
+本フォントはOpen Font License(https://github.com/MeatBunDisplay/Server/OFL.txt) のもとで提供されています。
+©2016 Google Fonts, ©2016 自家製フォント工房, © 2016 M+ FONTS PROJECT
+
 ## データベース操作
 ### インストール
 * MySQL80系推奨
