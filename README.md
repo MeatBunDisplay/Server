@@ -5,6 +5,7 @@
 本ソフトウェアでは表示フォントに「M PLUS Rounded 1c」(https://fonts.google.com/specimen/M+PLUS+Rounded+1c) を使用しています。  
 本フォントはOpen Font License(https://github.com/MeatBunDisplay/Server/blob/main/LICENSE.txt) のもとで提供されています。  
 ©2016 Google Fonts, ©2016 自家製フォント工房, © 2016 M+ FONTS PROJECT  
+「M PLUS Rounded 1c」を除く本ソフトウェアの著作権はGODofMEGANEとminfaox3が所有しています。  
 
 ## データベース操作
 ### インストール

@@ -1,5 +1,5 @@
 「M PLUS Rounded 1c」を除く本ソフトウェアの著作権はGODofMEGANEとminfaox3が所有しています。
-試用しているフォント「M PLUS Rounded 1c」は以下のライセンスのもと提供されています。
+使用しているフォント「M PLUS Rounded 1c」は以下のライセンスのもと提供されています。
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
